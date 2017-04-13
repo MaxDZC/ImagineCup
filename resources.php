@@ -1,11 +1,12 @@
+<?php
+session_start();
+include("sql_connect.php");
 
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,26 +31,7 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
 
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'						- Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
@@ -67,15 +49,6 @@
                 <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
                 </li> -->
                 <li class="breadcrumb-item active">Visit</li>
-
-                <!-- Breadcrumb Menu-->
-                <!-- <li class="breadcrumb-menu hidden-md-down">
-                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <a class="btn btn-secondary" href="#"><i class="icon-speech"></i></a>
-                        <a class="btn btn-secondary" href="./"><i class="icon-graph"></i> &nbsp;Dashboard</a>
-                        <a class="btn btn-secondary" href="#"><i class="icon-settings"></i> &nbsp;Settings</a>
-                    </div>
-                </li> -->
             </ol>
 
 
@@ -88,7 +61,7 @@
                             </div>
                             <div class="card-block">
                             <a href="library.php">
-                            <img src="img/bookshelf.png" width="490px">
+                                <center><img src="img/bookshelf.png" width="490px"></center>
                             </a>
                             </div>
                         </div>
@@ -99,7 +72,8 @@
                             Teachers' Repositories
                             </div>
                             <div class="card-block">
-                            <a href="teachersdesk.php"><img src="img/desk.png" width="490px"></a>
+                            <a href="teachersdesk.php">
+                                <center><img src="img/desk.png" width="490px"></a></center>
                             </div>
                         </div>
                     </div>
@@ -114,9 +88,7 @@
     </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->

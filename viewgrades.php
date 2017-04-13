@@ -1,10 +1,13 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+  header("location: index.php");
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,12 +85,13 @@
                 <div class="topnav" id="myTopnav">
                     <?php 
                         $key=1;
-                        $idnum=$_GET["id"];
-                        $name=$_GET["name"];
-                        $count=$_GET["count"];
-                        while($key<=$count){
-                            echo "<a href='viewgrades.php?id=$idnum&name=$name&count=$count&level=Grade $key''>Grade $key</a>";
-                            $key++;
+                        $idnum=$_SESSION["id"];
+                        $name=$_SESSION["name"];
+                        $result=mysqli_query($mysqli, "SELECT * FROM STUDENT WHERE student_id = '".$idnum."'");
+                        $row=mysqli_fetch_array($result);
+                        $level=$row[6];
+                        for($i = 1; $i <= $level; $i++){
+                          echo "<a href='viewgrades.php?grade=$i'>Grade $i</a>";
                         }
 
                     ?>
@@ -98,15 +102,19 @@
                     <div class="col-lg-12" id="grades">                                    
                     <div class="card">
                         <?php
-                            $idnum=$_GET["id"];
-                            $name=$_GET["name"];
-                            $level=$_GET["level"];
+                            $idnum=$_SESSION["id"];
+                            $name=$_SESSION["name"];
 
-                            $mysqli=new mysqli("localhost","root","","oneschool");
-                            $table=mysqli_query($mysqli,"SELECT* FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level'");
+                            if(isset($_GET['grade'])){
+                              $level=$_GET['grade'];
+                            } else {
+                              $level=1;
+                            }
+
+                            $table=mysqli_query($mysqli,"SELECT * FROM grades WHERE student_id='".$idnum."' AND grade_level =".$level." AND active = 1");
 
                             echo "
-                               <div class='card-header'><strong>$level</strong></div>
+                               <div class='card-header'><strong>Grade $level</strong></div>
                                <div class='card-block'>
                                     <table class='table table-striped table-bordered'>
                                             <thead>
@@ -120,7 +128,29 @@
                                             <tbody>";
 
                         while($row=mysqli_fetch_array($table)){
-                            echo "<tr><td>$row[2]</td><td><center><span data-toggle='modal' data-target='#model'>$row[3]</span></center></td><td><center><span data-toggle='modal' data-target='#model'>$row[4]</span></center></td><td><center><span data-toggle='modal' data-target='#model'>$row[5]</span></center></td><td><center><span data-toggle='modal' data-target='#model'>$row[6]</span></center></td><td><center>$row[7]</center></td></tr>";
+                          $subject=mysqli_query($mysqli, "SELECT * FROM SUBJECTS WHERE subj_id =".$row[1]."");
+                          $subj=mysqli_fetch_array($subject);
+                          $avg=($row[4]+$row[5]+$row[6]+$row[7])/4;
+                            echo "<tr>
+                                    <td>
+                                      $subj[1]
+                                    </td>
+                                    <td>
+                                      <center><span data-toggle='modal' data-target='#model'>$row[4]</span></center>
+                                    </td>
+                                    <td>
+                                      <center><span data-toggle='modal' data-target='#model'>$row[5]</span></center>
+                                    </td>
+                                    <td>
+                                      <center><span data-toggle='modal' data-target='#model'>$row[6]</span></center>
+                                    </td>
+                                    <td>
+                                      <center><span data-toggle='modal' data-target='#model'>$row[7]</span></center>
+                                    </td>
+                                    <td>
+                                      <center>$avg</center>
+                                    </td>
+                                  </tr>";
                         }                        
                               
                          echo "</tbody></table></div>";     
@@ -212,9 +242,7 @@
 </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->

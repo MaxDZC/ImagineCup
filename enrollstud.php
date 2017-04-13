@@ -1,14 +1,27 @@
-<?php 
-	$idnum=$_GET["id"];
-	$name=$_GET["name"];
-	$level=$_GET["level"];
-	$sect=$_GET["sect"];
+<?php
+session_start(); 
+include("sql_connect.php");
 
-	$mysqli=new mysqli("localhost","root","","oneschool");
+$idnum=$_GET["secid"];
 
-	$query="UPDATE studentlist SET section='$sect' WHERE idnum='$idnum' AND status!='Done'";
+$section=mysqli_query($mysqli, "SELECT * FROM subsection WHERE sec_id=".$idnum."");
+$data=mysqli_fetch_array($section);
 
-	$mysqli->query($query);
+$result=mysqli_query($mysqli, "UPDATE student SET sec_id=".$idnum.", section='".$data[3]."' WHERE student_id ='".$_SESSION['id']."'");
 
-	header("Location: enrollclass.php?id=$idnum&name=$name&level=$level")
-?>
+if($result){
+    $table=mysqli_query($mysqli, "SELECT * FROM class WHERE sec_id =".$idnum."");
+
+    while($row=mysqli_fetch_array($table)){
+        $stmt = "INSERT INTO section VALUES (".$row[0].", '".$_SESSION['id']."', 1)";
+        $do=mysqli_query($mysqli, $stmt);
+
+        if(!$do){
+            header("location: enrollclass.php");
+        }
+    }
+
+    header("location: enrollclass.php");
+} else {
+    header("location: enrollclass.php");
+}

@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location:index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +20,7 @@
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,jQuery,CSS,HTML,RWD,Dashboard">
     <link rel="shortcut icon" href="img/favicon.png">
 
-    <title>One School - View Grades</title>
+    <title>One School - Enroll</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -45,14 +47,13 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Enrolment System</li>
                 <li class="breadcrumb-item active"><?php 
-                    $id=$_GET["id"];
-                    $mysqli=new mysqli("localhost","root","","oneschool");
-                    $table=mysqli_query($mysqli,"SELECT currentgr FROM studentlist WHERE idnum='$id' AND status!='Done'");
+                    $id=$_SESSION["id"];
+
+                    $table=mysqli_query($mysqli,"SELECT * FROM STUDENT WHERE student_id= '".$id."'");
                     $select=mysqli_fetch_array($table);
-                    echo $select[0];
+                    echo "Grade ".$select[6];
                 ?></li>
             </ol>
-
 
             <div class="container-fluid">
                 <div class="row">
@@ -71,23 +72,62 @@
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $idnum = $_GET["id"];
-                                            $mysqli = new mysqli("localhost","root","","oneschool");
+                                            $idnum = $_SESSION["id"];
 
-                                            $query=mysqli_query($mysqli,"SELECT currentgr,section FROM studentlist WHERE idnum='$id' AND status!='Done'");
+                                            $table=mysqli_query($mysqli,"SELECT * FROM section WHERE student_id='".$id."' AND active = 1");
 
-                                            $select=mysqli_fetch_array($query);
-
-                                            $level=$select[0];
-                                            $section=$select[1];
-
-                                            $table = mysqli_query($mysqli,"SELECT * FROM schedule WHERE gradelvl='$level' AND section='$section'");
                                             while($row=mysqli_fetch_array($table)){
+                                                $get=mysqli_query($mysqli, "SELECT * FROM class WHERE class_id = ".$row[0]."");
+                                                $row2=mysqli_fetch_array($get);
+
+                                                $sched=mysqli_query($mysqli, "SELECT * FROM schedule WHERE sched_id = ".$row2[1]."");
+                                                $row3=mysqli_fetch_array($sched);
+
+                                                $subj=mysqli_query($mysqli, "SELECT * FROM subjects WHERE subj_id=".$row3[1]."");
+                                                $row4=mysqli_fetch_array($subj);
+
+                                                $tech=mysqli_query($mysqli, "SELECT * FROM teacher WHERE teacher_id='".$row2[2]."'");
+                                                $teacher=mysqli_fetch_array($tech);
+
+                                                $date=date("h:i A", strtotime($row3[3]))." - ".date("h:i A", strtotime($row3[4]));
+                                                $days= "";
+
+                                                if($row3[5] & 1){
+                                                    $days = "M";
+                                                }
+
+                                                if($row3[5] & 2){
+                                                    $days .= "T";
+                                                }                                                
+
+                                                if($row3[5] & 4){
+                                                    $days .= "W";
+                                                }
+
+                                                if($row3[5] & 8){
+                                                    $days .= "TH";
+                                                }  
+                                                
+                                                if($row3[5] & 16){
+                                                    $days .= "F";
+                                                }
+
+                                                if($row3[5] & 32){
+                                                    $days .= "Sat";
+                                                } 
+
+                                                if($row3[5] & 64){
+                                                    $days .= "Sun";
+                                                }
+
+                                                $date .= " ".$days;
+                                                $name=$teacher[4].", ".$teacher[2]." ".$teacher[3]; 
+
                                                 echo
                                                     "<tr>
-                                                        <td>".$row[1]."</td>
-                                                        <td>".$row[2]."</td>
-                                                        <td>".$row[3]."</td>
+                                                        <td>".$row4[1]."</td>
+                                                        <td>".$date."</td>
+                                                        <td>".$name."</td>
                                                     </tr>";
                                                 }
                                         ?>
@@ -100,11 +140,8 @@
                                         </div>
                                 </div>
                         </div>
-                        
-                        </div>
-                        
-                        
-                    </div>
+                      </div>  
+                   </div>
                 </div>
             </div>
             <!-- /.conainer-fluid -->
@@ -124,38 +161,48 @@
                     <div class="col-lg-12">
                         <div class="card">
                                 <div class="card-block">
-                                    <table class="table-striped table-bordered table">
-                                        <thead>
-                                            <th>Grade Level</th>
-                                            <th>Section</th>
-                                            <th>Adviser</th>
-                                            <th>Action</th>
-                                        </thead>
-                                        <tbody>
-                                          <?php
-                                            $idnum = $_GET["id"];
-                                            $name=$_GET["name"];
-                                            $mysqli = new mysqli("localhost","root","","oneschool");
+                                    <?php
+                                        if(!$select[10]){
+                                            echo '<table class="table-striped table-bordered table">
+                                                    <thead>
+                                                        <th>Section</th>
+                                                        <th>Adviser</th>
+                                                        <th>Action</th>
+                                                    </thead>
+                                                    <tbody>';
 
-                                            $query=mysqli_query($mysqli,"SELECT currentgr FROM studentlist WHERE idnum='$id' AND status!='Done'");
+                                            $table=mysqli_query($mysqli,"SELECT * FROM subsection WHERE grade_level=".$select[6]." AND active = 1");
 
-                                            $select=mysqli_fetch_array($query);
 
-                                            $level=$select[0];
-
-                                            $table = mysqli_query($mysqli,"SELECT * FROM class WHERE gradelvl='$level'");
                                             while($row=mysqli_fetch_array($table)){
+                                                $nameget=mysqli_query($mysqli, "SELECT t_fName, t_mName, t_lName FROM teacher WHERE teacher_id ='".$row[1]."'");
+                                                $name=mysqli_fetch_array($nameget);
+
+                                                $fullName=$name[2].", ".$name[0]." ".$name[1];
+
                                                 echo
-                                                    "<tr>
-                                                        <td>".$row[0]."</td>
-                                                        <td>".$row[1]."</td>
-                                                        <td>".$row[2]."</td>
-                                                        <td><a target='_blank' href='viewclass.php?id=$idnum&name=$name&level=$row[0]&sect=$row[1]'><button class='btn btn-md btn-primary'><i class='fa fa-circle-o'></i>  View</button></a> <a href='enrollstud.php?id=$idnum&name=$name&level=$row[0]&sect=$row[1]'><button class='btn btn-md btn-warning'><i class='icon-check'></i>  Select</button></a></td>
-                                                    </tr>";
+                                                    '<tr>
+                                                      <td>
+                                                        '.$row[3].'
+                                                      </td>
+                                                      <td>
+                                                        '.$fullName.'
+                                                      </td>
+                                                      <td>
+                                                        <a href="viewclass.php?secid='.$row[0].'&name='.$row[3].'"><button class="btn btn-md btn-primary"><i class="fa fa-circle-o"></i>  View</button>
+                                                        </a> 
+                                                        <a href="enrollstud.php?secid='.$row[0].'"><button class="btn btn-md btn-warning"><i class="icon-check"></i>  Select</button>
+                                                        </a>
+                                                      </td>
+                                                    </tr>';
                                                 }
-                                        ?>  
+                                         echo'
                                         </tbody>
-                                    </table>
+                                    </table>';
+                                        } else {
+                                            echo "You are already enrolled!";
+                                        }
+                                    ?>
                                 </label>
                                 </div>
                                     
@@ -171,9 +218,7 @@
 </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->

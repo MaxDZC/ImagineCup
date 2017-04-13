@@ -30,26 +30,7 @@
     <link href="css/style.css" rel="stylesheet">
 
 </head>
-<!-- BODY options, add following classes to body to change options
 
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'						- Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
 
@@ -465,9 +446,7 @@
 </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 </body>
 

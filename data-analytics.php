@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,26 +31,7 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
 
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'						- Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
@@ -59,7 +42,7 @@
         <?php include("sidebar-admin.php") ?>
 
         <!-- Main content -->
-        <main class="main">
+        <main class="main"> 
 
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
@@ -214,7 +197,7 @@
                                                     </div>
                                                     <div class="bars">
                                                         <div class="progress progress-xs">
-                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 34%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 34%" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                         <div class="progress progress-xs">
                                                             <div class="progress-bar bg-danger" role="progressbar" style="width: 78%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
@@ -242,15 +225,16 @@
                                     <thead>
                                         <th>Student ID</th>
                                         <th>Student Name</th>
+                                        <th>Grade Level</th>
                                         <th>Action</th>
                                     </thead>
                                     <tbody>
                                         <?php 
-
-                                            $mysqli=new mysqli("localhost","root","","oneschool");
-                                            $table=mysqli_query($mysqli,"SELECT*FROM studentlist");
+                                            $table=mysqli_query($mysqli,"SELECT * FROM student WHERE active = 1");
                                             while($row=mysqli_fetch_array($table)){
-                                                echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td>
+                                                $name=$row[4].", ".$row[2]." ".$row[3][0].".";
+                                                echo "<tr><td>".$row[0]."</td><td>".$name."</td>
+                                                <td>".$row[6]."</td>
                                                     <td><a href='analytics-1.php' target='_blank'><button class='btn btn-sm btn-primary'><i class='fa fa-circle-o'></i> View</button></a></td></tr>";
                                             }
                                         ?>
@@ -261,16 +245,13 @@
                     </div>
                 </div>
             </div>
-            <!-- /.conainer-fluid -->
         </main>
 
 
     </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->
@@ -406,7 +387,7 @@ $(document).ready(function() {
 
     ctx = $("#line");
     data = {
-        labels: ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"],
+        labels: ["2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"],
         datasets: [{
             label: "Track Grade",
             fill: false,

@@ -103,7 +103,7 @@
                                 <h4 class="panel-title"><i class="icon-graph"></i> Subjects  </h4>
                             </div>
                             <div class="panel-body">
-                                <canvas id="pie" class="pie" width="100px" height="50.9 px"></canvas>
+                                <canvas id="pie" class="pie" width="100%" height="100%"></canvas>
                             </div>
                         </div>                        
                     </div>
@@ -394,9 +394,7 @@
 </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 </body>
 

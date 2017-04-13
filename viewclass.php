@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location:index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,63 +46,100 @@
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Enrolment System</li>
-                <li class="breadcrumb-item active"><?php 
-                    $id=$_GET["id"];
-                    $mysqli=new mysqli("localhost","root","","oneschool");
-                    $table=mysqli_query($mysqli,"SELECT currentgr,section FROM studentlist WHERE idnum='$id' AND status!='Done'");
-                    $select=mysqli_fetch_array($table);
-                    echo $select[0].' - '.$_GET["sect"];
-                ?></li>
+                <?php 
+                    $id=$_GET["secid"];
+
+                    $studT=mysqli_query($mysqli, "SELECT * FROM student WHERE student_id ='".$_SESSION['id']."'");
+                    $level=mysqli_fetch_array($studT);
+
+                    echo '<li class="breadcrumb-item"><a href="enrollclass.php">Grade '.$level[6].'</a></li>';
+                    echo '<li class="breadcrumb-item active">'.$_GET["name"].'</li>';    
+                ?>
             </ol>
 
-
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header"></i><strong> Class Schedule</strong>
-                            </div>
-                            <div class="card-block">
-                                    <table class="table table-bordered table-striped table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th>Subject</th>
-                                                <th>Time</th>
-                                                <th>Teacher</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $idnum = $_GET["id"];
-                                            $level=$_GET["level"];
-                                            $section=$_GET["sect"];
-
-                                            $mysqli = new mysqli("localhost","root","","oneschool");
-
-                                            
-                                            $table = mysqli_query($mysqli,"SELECT * FROM schedule WHERE gradelvl='$level' AND section='$section'");
-                                            while($row=mysqli_fetch_array($table)){
-                                                echo
-                                                    "<tr>
-                                                        <td>".$row[1]."</td>
-                                                        <td>".$row[2]."</td>
-                                                        <td>".$row[3]."</td>
-                                                    </tr>";
-                                                }
-                                        ?>
-                                            
-                                        </tbody>
-                        
-                                        </table>
-                                </div>
-                        </div>
-                        
-                        </div>
-                        
-                        
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <i><strong> Class Schedule</strong></i>
                     </div>
+                    <div class="card-block">
+                      <table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Subject</th>
+                            <th>Time</th>
+                            <th>Teacher</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                            $table = mysqli_query($mysqli,"SELECT * FROM class WHERE sec_id='".$id."' AND active = 1");
+                            while($row=mysqli_fetch_array($table)){
+                              $schedT=mysqli_query($mysqli, "SELECT * FROM schedule WHERE sched_id=".$row[1]." AND active = 1");
+                              $sched=mysqli_fetch_array($schedT);
+
+                              $subjT=mysqli_query($mysqli, "SELECT * FROM subjects WHERE subj_id=".$sched[1]." AND active = 1");
+                              $subj=mysqli_fetch_array($subjT);
+
+                              $date=date("h:i A", strtotime($sched[3]))." - ".date("h:i A", strtotime($sched[4]));
+                              $days= "";
+
+                              $teachT=mysqli_query($mysqli, "SELECT * FROM teacher WHERE teacher_id='".$row[2]."'");
+                              $teacher=mysqli_fetch_array($teachT);
+
+                              if($sched[5] & 1){
+                                  $days = "M";
+                              }
+
+                              if($sched[5] & 2){
+                                  $days .= "T";
+                              }                                                
+
+                              if($sched[5] & 4){
+                                  $days .= "W";
+                              }
+
+                              if($sched[5] & 8){
+                                  $days .= "TH";
+                              }  
+                              
+                              if($sched[5] & 16){
+                                  $days .= "F";
+                              }
+
+                              if($sched[5] & 32){
+                                  $days .= "Sat";
+                              } 
+
+                              if($sched[5] & 64){
+                                  $days .= "Sun";
+                              }
+
+                              $date .= " ".$days;
+                              $name=$teacher[4].", ".$teacher[2]." ".$teacher[3]; 
+
+                              echo
+                                "<tr>
+                                    <td>".$subj[1]."</td>
+                                    <td>".$date."</td>
+                                    <td>".$name."</td>
+                                </tr>";
+                            }
+                          ?>        
+                        </tbody>
+                      </table>
+                      <?php
+                       echo '<a href="enrollstud.php?secid='.$_GET['secid'].'"><button class="btn btn-md btn-warning"><i class="icon-check"></i>  Select</button>
+                      </a>';
+                      ?>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
             <!-- /.conainer-fluid -->
         </main>
     </div>
@@ -165,9 +204,7 @@
 </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->

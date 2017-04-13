@@ -10,7 +10,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <img src="img/lecture-1.png" class="img-avatar" alt="admin@bootstrapmaster.com">
-                    <span class="hidden-md-down">Admin</span>
+                    <span class="hidden-md-down">Admin <?php echo $_SESSION['name']; ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
 
@@ -19,7 +19,7 @@
                     </div>
 
                     <a class="dropdown-item" href="teacher-profile.php"><i class="fa fa-user"></i> Profile</a>
-                    <a class="dropdown-item" href="pages-login.html"><i class="fa fa-lock"></i> Logout</a>
+                    <a class="dropdown-item" href="index.php"><i class="fa fa-lock"></i> Logout</a>
                 </div>
             </li>
         </ul>

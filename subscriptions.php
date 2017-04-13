@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,26 +31,7 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
 
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-compact'				- Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'						- Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
@@ -64,16 +47,13 @@
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Management</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item active">Subscriptions</li>
-
                 
             </ol>
 
 
             <div class="container-fluid">
-                
+                <h1>In Development</h1>
             </div>
             <!-- /.conainer-fluid -->
         </main>
@@ -82,9 +62,7 @@
     </div>
 
     <footer class="app-footer">
-        <!-- <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span> -->
+
     </footer>
 
     <!-- Bootstrap and necessary plugins -->
