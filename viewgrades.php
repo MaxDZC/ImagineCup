@@ -84,7 +84,6 @@ if(!isset($_SESSION['name'])){
             <div class="container-fluid">
                 <div class="topnav" id="myTopnav">
                     <?php 
-                        $key=1;
                         $idnum=$_SESSION["id"];
                         $name=$_SESSION["name"];
                         $result=mysqli_query($mysqli, "SELECT * FROM STUDENT WHERE student_id = '".$idnum."'");

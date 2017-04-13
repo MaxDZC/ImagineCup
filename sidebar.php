@@ -27,9 +27,8 @@
                                 </i>Performance Tracker</a>
                             </li>
                     </li>
-
                             <li class="nav-item">
-                                <a class="nav-link" href="countlevel2.php?id=<?php echo $_GET["id"];?>&name=<?php echo $_GET["name"];?>"><i class="icon-graph">
+                                <a class="nav-link" href="tracks.php"><i class="icon-graph">
                                 </i>Track Analysis</a>
                             </li>
                         </ul>

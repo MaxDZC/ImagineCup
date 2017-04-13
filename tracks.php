@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,17 +84,17 @@
 
             <div class="container-fluid">
                 <div class="topnav" id="myTopnav"><?php 
-                        $key=1;
-                        $idnum=$_GET["id"];
-                        $name=$_GET["name"];
-                        $count=$_GET["count"];
-                        while($key<=$count){
-                            echo "<a href='tracks.php?id=$idnum&name=$name&count=$count&level=Grade $key''>Grade $key</a>";
-                            $key++;
+                        $idnum=$_SESSION["id"];
+                        $name=$_SESSION["name"];
+                        $result=mysqli_query($mysqli, "SELECT * FROM STUDENT WHERE student_id = '".$idnum."'");
+                        $row=mysqli_fetch_array($result);
+                        $level=$row[6];
+                        for($i = 1; $i <= $level; $i++){
+                          echo "<a href='tracks.php?grade=$i'>Grade $i</a>";
                         }
 
                     ?>
-                    <a href=''>Summary</a>
+                    <a href='#'>Summary</a>
                 </div>
                 <br>
                 <div class="row">
