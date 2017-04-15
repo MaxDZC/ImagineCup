@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,14 +60,13 @@
     <div class="app-body">
         <?php include("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Learning Resources</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item active">Universal Library</li>
 
                 <!-- Breadcrumb Menu-->
@@ -125,7 +126,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <nav>
+                      <!--              <nav>
                                         <ul class="pagination">
                                             <li class="page-item"><a class="page-link" href="#">Prev</a>
                                             </li>
@@ -141,7 +142,7 @@
                                             <li class="page-item"><a class="page-link" href="#">Next</a>
                                             </li>
                                         </ul>
-                                    </nav>
+                                    </nav> -->
                                 </div>
                             </div>
                         </div>

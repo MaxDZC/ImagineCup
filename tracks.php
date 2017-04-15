@@ -6,6 +6,11 @@ if(!isset($_SESSION['name'])){
     header("location: index.php");
 }
 
+$studT=mysqli_query($mysqli,"SELECT * FROM student WHERE student_id = '".$_SESSION['id']."'");
+$stud=mysqli_fetch_array($studT);
+
+$cnt=$stud[6];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,10 +77,10 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
     <?php require("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Track Analysis</li>
                 <li class="breadcrumb-item active">View</li>
@@ -83,20 +88,6 @@ if(!isset($_SESSION['name'])){
 
 
             <div class="container-fluid">
-                <div class="topnav" id="myTopnav"><?php 
-                        $idnum=$_SESSION["id"];
-                        $name=$_SESSION["name"];
-                        $result=mysqli_query($mysqli, "SELECT * FROM STUDENT WHERE student_id = '".$idnum."'");
-                        $row=mysqli_fetch_array($result);
-                        $level=$row[6];
-                        for($i = 1; $i <= $level; $i++){
-                          echo "<a href='tracks.php?grade=$i'>Grade $i</a>";
-                        }
-
-                    ?>
-                    <a href='#'>Summary</a>
-                </div>
-                <br>
                 <div class="row">
                     <div class="col-lg-6">                         
                     <div class="card"><div class="card-block">
@@ -105,7 +96,7 @@ if(!isset($_SESSION['name'])){
                                 <h4 class="panel-title"><i class="icon-graph"></i> Subjects  </h4>
                             </div>
                             <div class="panel-body">
-                                <canvas id="pie" class="pie" width="100%" height="100%"></canvas>
+                                <canvas id="pie" class="pie" height="200%"></canvas>
                             </div>
                         </div>                        
                     </div>
@@ -117,7 +108,7 @@ if(!isset($_SESSION['name'])){
                         <div class="panel panel-green">
                             <div class="panel-heading"><h4 class="panel-title"><i class="icon-chart"></i> Tracks</h4></div> 
                             <div class="panel-body">
-                                <canvas id="bar" class="bar"></canvas>
+                                <canvas id="bar" class="bar" height="200%"></canvas>
                             </div>
                         </div>
                         </div>
@@ -127,273 +118,75 @@ if(!isset($_SESSION['name'])){
                 
                 <div class="row">
                     <div class="col-lg-12">
-                    <center>
-                    <div class="col-lg-3">
-                    <div class="card"><div class="card-header"></div>
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr><th rowspan="2"><center>Subject</center></th>
-                            <?php 
-                                $count=$_GET["count"];
-                                echo "<th colspan='$count'><center>Final Grade</center></th>";  
-                            ?></tr>
-                            <tr>
-                                <?php 
-                                    $count=$_GET["count"];
-                                    $x=1;
-                                    while($x<=$count){
-                                        echo "<td><center>Grade $x</center></td>";
-                                        $x++;
-                                    }
-                                ?>
-                            </tr>
+                        <div class="card">
+                          <div class="card-header"><center><strong>Summary of Grades</strong></center></div>
+                            <table class="table table-striped table-bordered">  
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">
+                                            <center>Subject</center>
+                                        </th>
+                                        <?php 
+                                            for($i=1; $i <= $cnt; $i++){
+                                              echo "<th>
+                                                      <center>Grade ".$i."</center>
+                                                    </th>";
+                                            }
+                                            echo "<th>
+                                                    <center>Average</center>
+                                                  </th>";
+                                        ?>
+                                    </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><center>Mother Tongue</center></td>
-                                    <?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Mother Tongue'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
+                              <?php
+                                $gradeArray = array();
+                                $subjArray = array();
+                                for($i = 1; $i < 13; $i ++) {
+                                    $sum=0;
+                                    $num=0;
+                                    echo "<tr><td>";
+                                    $subjT=mysqli_query($mysqli, "SELECT * FROM subjects WHERE subj_id =".$i." AND active = 1");
+                                    $subj=mysqli_fetch_array($subjT);
+                                    echo $subj[1]."</td>";
+                                    array_push($subjArray, $subj[1]);
+                                    for($j = 1; $j <= $cnt; $j++) {
+                                        echo "<td><center>";
+                                        $gradeT=mysqli_query($mysqli, "SELECT * FROM grades WHERE student_id = '".$_SESSION['id']."' AND grade_level = ".$j." AND subj_id = ".$i." AND active = 1");
+                                        $grade=mysqli_fetch_array($gradeT);
+                                        if(mysqli_num_rows($gradeT) == 0){
+                                          echo "N/A";
+                                        } else {
+                                        $fgrade=round($grade[4]);
+                                        $sgrade=round($grade[5]);
+                                        $tgrade=round($grade[6]);
+                                        $frgrade=round($grade[7]);
+                                          $avg=round(($fgrade + $sgrade + $tgrade + $frgrade)/4);
+                                          echo $avg;
+                                          $sum+=$avg;
+                                          $num++;
                                         }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Filipino</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Filipino'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>English</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='English'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Mathematics</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Mathematics'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Science</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Science'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Araling Panlipunan</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Araling Panlipunan'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Edukasyon sa Pagkatao</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Edukasyon sa Pagkatao'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Music</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Music'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Arts</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Arts'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Physical Education</td><?php 
-                                        $idnum=$_GET["id"];
-                                        $level=$_GET["level"];
-                                        $count=$_GET["count"];
-                                        $x=1;
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        while($x<=$count){
-                                        $table=mysqli_query($mysqli,"SELECT average FROM graderecord WHERE idnum='$idnum' AND gradelevel='$level' AND subject='Physical Education'");
-                                        $select=mysqli_fetch_array($table);
-                                            echo "<td>$select[0]</td>";
-                                            $x++;
-                                        }
-                                    ?>
-                                </tr>
-                                <tr>
-                                    <td><center>Health</td>
-                                </tr>
-                                <tr>
-                                    <td><center>Edukasyong Pantahanan at Pangkabuhayan</td>
-                                </tr>
-
+                                        echo "</center></td>";
+                                    }
+                                    echo "<td><center>";
+                                    if($sum!=0 && $num!=0){
+                                      echo $sum/$num;
+                                      array_push($gradeArray, $sum/$num);
+                                    } else {
+                                      echo "N/A";
+                                      array_push($gradeArray, 0);
+                                    }
+                                    echo "</center></td></tr>";
+                                }
+                              ?>     
                             </tbody>
                         </table>
                     </div>
-                    </div>
-                    </center>
                 </div>
             </div>
             <!-- /.conainer-fluid -->
         </main>
     </div>
-
-<div class="modal" id="model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><strong>Grade Breakdown</strong></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <div class="card">
-              <div class="card-header"><strong>Homeworks and Assignments</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead>
-                  </table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Seatworks</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead></table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Quizzes</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead></table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Projects and Major Exams</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th colspan="3"><center>Projects</center></th>
-                          <th rowspan="2"><center>Midterm</center></th>
-                          <th rowspan="2"><center>Periodical</center></th>
-                        </tr>
-                        <tr>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                        </tr>
-                      </thead>
-                  </table>
-              </div>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button data-dismiss="modal" type="button" class="btn btn-primary">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
 
     <footer class="app-footer">
 
@@ -423,79 +216,6 @@ if(!isset($_SESSION['name'])){
 <script src="js/piechart.js"></script>
 
 <script>
-
-$(document).ready(function() {    
-    var options = {
-        scales: {
-            ticks: {
-                max: 100
-            }
-        }
-    };
-    var ctx = $("#bar");
-        
-        // data
-    var colors = getRandomColors();
-    var data = {
-        labels: ["HUMSS", "STEM", "ABM", "GAS"],
-        datasets: [
-            {
-                label: "Grade Point Average",
-                backgroundColor: [
-                    colors[0],
-                    colors[1],
-                    colors[2],
-                    colors[3]
-                ],
-                borderColor: [
-                    colors[0],
-                    colors[1],
-                    colors[2],
-                    colors[3]
-                ],
-                borderWidth: 1,
-                data: [90.195, 91.364, 91.423 , 90.625],
-            }]
-
-    };
-
-    // Property Type Distribution
-    propertyTypes = new Chart(ctx ,{
-        type: 'bar',
-        data: data,
-        options: {
-            scales : {
-                yAxes: [{
-                    ticks: {
-                        max: 100,
-                        min: 75
-                    }
-                }]
-            }
-        }
-    });
-
-    function getRandomColors(){
-        var letters = "0123456789ABCDEF";
-        var color = "#";
-        var colors = new Array();
-        var i, j;
-
-        for(i = 0; i < 12; i++){
-            for(j = 0; j < 6; j++){
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            colors[i] = color;
-            color = "#";
-        }
-
-        return colors;
-    }
-
-});
-</script>
-
-<script>
 $(document).ready(function() {    
     var options = {
         legend: {
@@ -505,28 +225,34 @@ $(document).ready(function() {
             }
         }
     };
-    var ctx = $("#pie");
-        
+    var ctx = $("#pie");    
         // data
     var colors = getRandomColors();
     var data = {
         labels: [
-            "Mother Tongue",
-            "Filipino",
-            "English",
-            "Mathematics",
-            "Science",
-            "Araling Panlipunan",
-            "Edukasyon sa Pagpakatao",
-            "Music",
-            "Arts",
-            "Physical Education",
-            "Health",
-            "Edukasyong Pantahanan at Pangkabuhayan"
+        <?php
+          $lim = count($subjArray);
+          for($i=0; $i<$lim; $i++) {
+            echo '"'.$subjArray[$i].'"';
+            if($i != $lim - 1) {
+              echo ", ";
+            }
+          }
+        ?>
         ],
         datasets: [
             {
-                data:[5, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5],
+                data:[
+                <?php
+                  for($j=0; $j<$lim; $j++) {
+                    echo $gradeArray[$j];
+                    if($i != $lim - 1) {
+                      echo ", ";
+                    }
+                  }
+                ?>
+
+                ],
                 backgroundColor: [
                     colors[0],
                     colors[1],
@@ -566,6 +292,76 @@ $(document).ready(function() {
         options: options
     });
 
+    ctx = $("#bar");
+    colors = getRandomColors();
+    data = {
+        labels: ["HUMSS", "STEM", "ABM", "GAS"],
+        datasets: [
+            {
+                label: "Grade Point Average",
+                backgroundColor: [
+                    colors[0],
+                    colors[1],
+                    colors[2],
+                    colors[3]
+                ],
+                borderColor: [
+                    colors[0],
+                    colors[1],
+                    colors[2],
+                    colors[3]
+                ],
+                borderWidth: 1,
+                data: [
+                  <?php
+
+                    for($m=2; $m<6; $m++) {
+                      $gpa = 0;
+                      for($k=0; $k<$lim; $k++) {
+                        $stat = false;
+                        $gradeAT=mysqli_query($mysqli, "SELECT * FROM gradeanalysis");
+                        while($gradeA=mysqli_fetch_array($gradeAT)) {
+                          if($gradeA[1] == $subjArray[$k]) {
+                            $stat = true;
+                            break;
+                          }
+                        }
+                        if($stat) {
+                          $gpa += $gradeArray[$k]*($gradeA[$m]/100);
+                        }
+                      }
+                      echo round($gpa, 2);
+                      if($m != 5) {
+                        echo ", ";
+                      }
+                    }
+
+                  ?>
+                ],
+            }]
+
+    };
+
+    // Property Type Distribution
+    propertyTypes = new Chart(ctx ,{
+        type: 'bar',
+        data: data,
+        options: {
+            legend : {
+                display: false
+            },
+            scales : {
+                yAxes: [{
+                    ticks: {
+                        max: 100,
+                        min: 75
+                    }
+                }]
+            }
+        }
+    });
+
+
     function getRandomColors(){
         var letters = "0123456789ABCDEF";
         var color = "#";
@@ -582,40 +378,5 @@ $(document).ready(function() {
 
         return colors;
     }
-
-
-    ctx = $("#line");
-    data = {
-        labels: ["Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10"],
-        datasets: [{
-            label: "Track Grade",
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "#fff",
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [90.8, 90.15,90.1,87.7,90.8,90.15,90.1,87.7,90.8,90.15],
-            spanGaps: false,
-        }]
-    };
-
-    var myLineChart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: {}
-    });
-
 });
 </script>

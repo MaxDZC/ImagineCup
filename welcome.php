@@ -44,14 +44,13 @@ $ann=mysqli_query($mysqli, "SELECT * FROM ANNOUNCEMENT WHERE (visibility & ".$ch
     <div class="app-body">
         <?php include("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item active">Welcome</li>
             </ol>
           <div class="container-fluid">

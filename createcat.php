@@ -1,15 +1,15 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])) {
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,28 +28,6 @@
     <link href="css/style.css" rel="stylesheet">
 
 </head>
-
-<!-- BODY options, add following classes to body to change options
-
-// Header options
-1. '.header-fixed'                  - Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'                 - Fixed Sidebar
-2. '.sidebar-hidden'                - Hidden Sidebar
-3. '.sidebar-off-canvas'        - Off Canvas Sidebar
-4. '.sidebar-compact'               - Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'          - Fixed Aside Menu
-2. '.aside-menu-hidden'         - Hidden Aside Menu
-3. '.aside-menu-off-canvas' - Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'                      - Fixed footer
-
--->
-
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header-admin.php"); ?>
@@ -58,20 +36,15 @@
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Admin Tasks</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item active">Subject Creation</li>
-
-                
             </ol>
-
-
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
@@ -82,20 +55,20 @@
                     <div class="card-block">
                         <table class="table table-striped table-bordered">
                             <thead>
-                                <th>Grade Level</th>
                                 <th>Subject</th>
                                 <th>Action</th>
                             </thead>
                         <tbody><?php 
-
-                                            $mysqli=new mysqli("localhost","root","","oneschool");
-                                            $table=mysqli_query($mysqli,"SELECT*FROM category");
-                                            while($row=mysqli_fetch_array($table)){
-                                                echo "<tr><td>".$row[0]."</td>
-                                                    <td>".$row[1].
-                                                    "</td>
-                                                    <td> <a href='data12.php?lvl=".$row[0]."&subj=".$row[1]."'><button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button></a></td></tr>";
-                                            }
+                                $table=mysqli_query($mysqli,"SELECT*FROM subjects");
+                                while($row=mysqli_fetch_array($table)){
+                                  echo "<tr>
+                                        <td>
+                                          ".$row[1]."
+                                        </td>
+                                        <td> 
+                                          <a href='data12.php?lvl=".$row[0]."&subj=".$row[1]."'>
+                                            <button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button></a></td></tr>";
+                                }
                                 ?>
                         </tbody>
                         </table>                        

@@ -40,10 +40,10 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
     <?php require("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Enrolment System</li>
                 <?php 

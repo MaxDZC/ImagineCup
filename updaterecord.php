@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location:index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,26 +31,38 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
+<style type="text/css">
+    /* Add a black background color to the top navigation */
+.topnav {
+    background-color: #1e2f2f;
+    overflow: hidden;
+}
 
-// Header options
-1. '.header-fixed'                  - Fixed Header
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;
+    font-size: 15px;
+}
 
-// Sidebar options
-1. '.sidebar-fixed'                 - Fixed Sidebar
-2. '.sidebar-hidden'                - Hidden Sidebar
-3. '.sidebar-off-canvas'        - Off Canvas Sidebar
-4. '.sidebar-compact'               - Compact Sidebar Navigation (Only icons)
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #0099cc;
+    color: white;
+}
 
-// Aside options
-1. '.aside-menu-fixed'          - Fixed Aside Menu
-2. '.aside-menu-hidden'         - Hidden Aside Menu
-3. '.aside-menu-off-canvas' - Off Canvas Aside Menu
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #4CAF50;
+    color: red;
+}
+</style>
 
-// Footer options
-1. '.footer-fixed'                      - Fixed footer
 
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
@@ -58,46 +72,241 @@
     <div class="app-body">
         <?php include("sidebar-teacher.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Class Record</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item"><?php echo $_GET["level"].' - '.$_GET["section"];?></li>
-                <li class="breadcrumb-item active"><?php echo $_GET["stud"]?></li>
+                <li class="breadcrumb-item active"><?php echo $_GET["subj"];?></li>
                 
             </ol>
-
-
             <div class="container-fluid">
+                <div class="topnav">
+                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=First Grading"; ?>">First Grading</a>
+                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Second Grading"; ?>">Second Grading</a>
+                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Third Grading"; ?>">Third Grading</a>
+                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Fourth Grading"; ?>">Fourth Grading</a>
+                </div>                                
+                <br>
+                <div class="row">
                 
-                <div class="row">
                     <div class="col-lg-12">
-                          <?php 
-                            $id=$_GET["stud"];
-                            $teacher=$_GET["name"];
-                            $section=$_GET["section"];
-                            $level=$_GET["level"];
-                            $mysqli=new mysqli("localhost","root","","oneschool");
-                            $list=mysqli_query($mysqli,"SELECT * FROM schedule WHERE gradelvl='$level' AND section='$section' AND teacher='$teacher'");
-                            while($row=mysqli_fetch_array($list)){
-                              echo "<a href='updaterecord2.php?name=$teacher&level=$level&section=$section&stud=$id&subj=$row[1]'><button class='btn btn-md btn-primary'>".$row[1]."</button></a> ";
-                            }
+                        <div class="card">
+                            <div class="card-header">
+                                 <strong>Records: <?php echo $_GET["prd"];?></strong>
+                            </div>
+                            <div class="card-block">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2"><center>ID Number</center></th>
+                                            <th colspan="5"><center>HW & A<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT hwa FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
 
-                          ?>
-                    </div>    
-                </div><br>
-                <div class="row">
-                  <div class="col-lg-12">
-                  <div class="card">
-                  </div>
+                                            ?></center></th>
+                                            <th colspan="5"><center>Seatworks<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT sw FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
+
+                                            ?></center></th>
+                                            <th colspan="5"><center>Quizzes<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT qz FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
+
+                                            ?></center></th>
+                                            <th colspan="3"><center>Projects<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT prj FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
+
+                                            ?></center></th>
+                                            <th rowspan="2"><center>Midterms<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT me FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
+
+                                            ?></center></th>
+                                            <th rowspan="2"><center>Periodicals<?php
+                                              $level=$_GET["level"];
+                                              $subject=$_GET["subj"];
+                                              $mysqli=new mysqli("localhost","root","","oneschool");
+                                              $query=mysqli_query($mysqli,"SELECT fe FROM category WHERE grdlvl='$level' AND subjid='$subject'");
+                                              $section=mysqli_fetch_array($query);
+                                              echo "  (".$section[0]."%)";
+
+                                            ?></center></th>
+                                            <th rowspan="2"><center>Equiv. Grade</center></th>
+                                        </tr>
+                                        <tr>
+                                          <th>1</th>
+                                          <th>2</th>
+                                          <th>3</th>
+                                          <th>4</th>
+                                          <th>5</th>
+                                          <th>1</th>
+                                          <th>2</th>
+                                          <th>3</th>
+                                          <th>4</th>
+                                          <th>5</th>
+                                          <th>1</th>
+                                          <th>2</th>
+                                          <th>3</th>
+                                          <th>4</th>
+                                          <th>5</th>
+                                          <th>1</th>
+                                          <th>2</th>
+                                          <th>3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php 
+                                      $level=$_GET["level"];
+                                      $subj=$_GET["subj"];
+                                      $acc=$_GET["name"];
+                                      $period=$_GET["prd"];
+
+                                      $mysqli=new mysqli("localhost","root","","oneschool");
+                                      $table=mysqli_query($mysqli,"SELECT * FROM classrecord WHERE gradelevel='$level' AND subject='$subj' AND teacher='$acc' AND gradingper='$period' AND status!='Done'");
+                                      while($row=mysqli_fetch_array($table)){
+                                          $table1=mysqli_query($mysqli,"SELECT grade FROM studentgrading WHERE idnum='$row[1]' AND gradelvl='$row[2]' AND subject='$subj' AND gradingper='$period'");
+                                          $array=mysqli_fetch_array($table1);
+                                          echo "<tr><td>".$row[1]."</td><td>".$row[5]."</td><td>".$row[6]."</td><td>".$row[7]."</td><td>".$row[8]."</td><td>".$row[9]."</td><td>".$row[10]."</td><td>".$row[11]."</td><td>".$row[12]."</td><td>".$row[13]."</td><td>".$row[14]."</td><td>".$row[15]."</td><td>".$row[16]."</td><td>".$row[17]."</td><td>".$row[18]."</td><td>".$row[19]."</td><td>".$row[20]."</td><td>".$row[21]."</td><td>".$row[22]."</td><td><center>".$row[23]."</center></td><td><center>".$row[24]."</center></td><td>".$array[0]."</td></tr>";
+                                      }
+
+                                    ?>
+                                    </tbody>
+                                </table>
+                                <div class="card-footer">
+                            <button class="btn btn-sm btn-success" data-target="#update" data-toggle="modal"> Update </button></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="modal" id="update" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><strong>Score Record</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                                <div class="card-block">
+
+                                <!-- name=$teacher&level=$level&section=$section&stud=$id&subj=$ -->
+
+                                    <form action="addrecord1.php?<?php 
+                                     $subj=$_GET["subj"]; $name=$_GET["name"]; $level=$_GET["level"]; $section=$_GET["section"];$prd=$_GET["prd"];
+
+                                      echo "name=$name&level=$level&section=$section&subj=$subj&prd=$prd";
+
+                                     ?>"
+                                    " method="post" enctype="multipart/form-data" class="form-horizontal ">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 form-control-label" for="text-input">ID Number</label>
+                                            <div class="col-md-9">
+                                            <input type="text" class="form-control" name="id" id="id" placeholder="Enter ID Number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label class="col-md-3 form-control-label" for="text-input">Type</label>
+                                            <div class="col-md-4">
+                                                <select class="form-control" id="type" name="type" onchange="get(this.value);">
+                                                <option value='0'>SELECT...</option>
+                                                <option>Homeworks and Assignments</option>
+                                                <option>Seatworks</option>
+                                                <option>Quizzes</option>
+                                                <object></object>
+                                                <option>Projects</option>
+                                                <option>Midterm Exam</option>
+                                                <option>Periodical Exam</option>
+                                                </select>
+                                          </div>
+
+
+                                          <label class="col-md-2 form-control-label" for="password-input">No.</label>
+                                            <div class="col-md-3">
+                                                <select class="form-control" type="text" name="no" id="no"></select>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row">
+                                          <label class="col-md-3 form-control-label" for="password-input">Title</label>
+                                            <div class="col-md-9">
+                                                <input class="form-control" type="text" name="title" id="title" placeholder="Enter Topic/Title">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                          <label class="col-md-3 form-control-label" for="password-input">Total Score</label>
+                                            <div class="col-md-4">
+                                                <input class="form-control" type="text" name="total" id="total">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                        <label class="col-md-3 form-control-label" for="password-input">Accumulated Score</label>
+                                            <div class="col-md-4">
+                                                <input class="form-control" type="text" name="acc" id="acc"></div>
+                                            </div>
+                                    <div class="card-footer">
+                                    <button onsubmit="validate()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                                    </div>
+                                    </form>
+                                </div>
+
+                    </div>
+                </div>        
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
             <!-- /.conainer-fluid -->
         </main>
+
+
+<script type="text/javascript">
+    var o=document.getElementById('no');
+
+      function get(value){
+          if(value=='0'||value=="Midterm Exam"||value=="Periodical Exam"){
+            o.innerHTML="<option></option>";
+          }else if(value=="Projects"){
+            o.innerHTML="<option>1</option><option>2</option><option>3</option>";
+          }else{
+            o.innerHTML="<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>";
+          }
+      }
+
+    </script>
 
         <script type="text/javascript">
             var t=document.getElementById('tablebody');
@@ -107,9 +316,9 @@
                 $teacher=$_GET["name"];
 
                 $mysqli=new mysqli("localhost","root","","oneschool");
-                $table=mysqli_query($mysqli,"SELECT * FROM studentlist WHERE section='$section'");
+                $table=mysqli_query($mysqli,"SELECT * FROM studentlist WHERE section='$section' AND status!='Done'");
                 while($row=mysqli_fetch_array($table)){
-                    echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td><a href='updaterecord.php?name=$teacher&level=$level&section=$section&stud=$row[1]'><button class='btn btn-sm btn-primary'> View</button></a></td></tr>";
+                    echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td><a href='updaterecord.php?name=$teacher&level=$level&section=$section&stud=$row[0]'><button class='btn btn-sm btn-primary'> View</button></a></td></tr>";
 
                 }
 
@@ -119,84 +328,6 @@
         </script>
 
 
-<div class="modal" id="addrecord" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Student Record</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-                  <div class="form-group">
-                      <label for="grdprd">Grading Period</label>
-                      <select style="width:100px" class="form-control" id="grdprd" onchange="periodchange(this.value)">
-                          <option value='0'>Select...</option>
-                          <option value='1'>1st</option>
-                          <option value='2'>2nd</option>
-                          <option value='3'>3rd</option>
-                          <option value='4'>4th</option>
-                      </select>
-                  </div>
-              <table class="table table-striped table-bordered">
-                  <thead>
-                          <th>HW & A</th>
-                          <th>Quizzes</th>
-                          <th>Seatworks</th>
-                          <th>Projects</th>
-                          <th>Midterm</th>
-                          <th>Periodical</th>
-                          <th>Grade</th>
-                  </thead>
-              <tbody id="grades-edit"></tbody>
-              </table> 
-            <div id="button">
-            <button onclick="change()" class="btn btn-md btn-warning"> Edit</button>
-            </div>
-      </div>
-      <div class="modal-footer">
-        <button data-dismiss="modal" type="button" class="btn btn-primary">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-    function periodchange(value){
-        switch(value){
-            case '0': document.getElementById('grades-edit').innerHTML="";
-                      break;
-            case '1': document.getElementById('grades-edit').innerHTML="<tr><td><center>93</center></td><td><center>93</center></td><td><center>93</center></td><td><center>93</center></td><td><center>93</center></td><td><center>93</center></td><td><center>93</center></td></tr>";
-                break;
-            case '2': document.getElementById('grades-edit').innerHTML="<tr><td><center>94</center></td><td><center>94</center></td><td><center>94</center></td><td><center>94</center></td><td><center>94</center></td><td><center>94</center></td><td><center>94</center></td></tr>";
-                break;
-            case '3': document.getElementById('grades-edit').innerHTML="<tr><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td></tr>";
-            break;
-            case '4': document.getElementById('grades-edit').innerHTML="<tr><td><center>95</center></td><td><center>95</center></td><td><center>95</center></td><td><center>95</center></td><td><center>95</center></td><td><center>95</center></td><td><center>95</center></td></tr>";
-            break;
-        }
-    }
-
-    function change(){
-        document.getElementById('button').innerHTML="<button onclick='save()' class='btn btn-md btn-danger'> Save</button>";
-        document.getElementById('grades-edit').innerHTML="<tr><td><center><select style='width:75px' class='form-control' id='no'><option value='0'>...</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></center><center><input type='text' style='width:75px' id='hwa'><center><button class='btn btn-sm btn-success' onclick='cell(1)'><i class='fa fa-plus-circle'></i></button></center></td><td><center><select style='width:75px' class='form-control' id='no'><option value='0'>...</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></center><center><input type='text' style='width:75px' id='hwa'><center><button class='btn btn-sm btn-success' onclick='cell(1)'><i class='fa fa-plus-circle'></i></button></center></td><td><center><select style='width:75px' class='form-control' id='no'><option value='0'>...</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></center><center><input type='text' style='width:75px' id='hwa'><center><button class='btn btn-sm btn-success' onclick='cell(2)'><i class='fa fa-plus-circle'></i></button></center></td><td><center><select style='width:75px' class='form-control' id='no'><option value='0'>...</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></center><center><input type='text' style='width:75px' id='hwa'><center><button class='btn btn-sm btn-success' onclick='cell(3)'><i class='fa fa-plus-circle'></i></button></center></td><td><center><input type='text' style='width:75px' id='hwa'><center></td><td><center><input type='text' style='width:75px' id='hwa'></td><td><center><input type='text' style='width:75px' id='hwa'></td>"
-    }
-    var table=document.getElementById('grades-edit');        
-    var row=table.insertRow(1);
-    function cell(value){
-        var cell=row.insertCell(value);
-        cell.innerHTML="<center><input type='text' style='width:75px' id='hwa'><center><button class='btn btn-sm btn-success' onclick='cell(value)'><i class='fa fa-plus-circle'></i></button></center>";
-    }
-
-    function view(){
-        document.getElementById('grades-edit').innerHTML="<tr><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td><td><center>92</center></td></tr>";
-    }
-    function save(){
-        view();
-        document.getElementById('button').innerHTML="<button onclick='change()' class='btn btn-md btn-warning'> Edit</button>";
-    }
-</script>        
     </div>
 
     <footer class="app-footer">
@@ -233,3 +364,4 @@
 </body>
 
 </html>
+    

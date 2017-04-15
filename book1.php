@@ -1,10 +1,4 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,14 +52,13 @@
     <div class="app-body">
         <?php include("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Learning Resources</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item active">Universal Library</li>
 
                 <!-- Breadcrumb Menu-->

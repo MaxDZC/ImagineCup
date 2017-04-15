@@ -71,10 +71,10 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
     <?php require("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Grade Reports</li>
                 <li class="breadcrumb-item active">View</li>
@@ -92,7 +92,6 @@ if(!isset($_SESSION['name'])){
                         for($i = 1; $i <= $level; $i++){
                           echo "<a href='viewgrades.php?grade=$i'>Grade $i</a>";
                         }
-
                     ?>
 
                 </div>
@@ -104,11 +103,7 @@ if(!isset($_SESSION['name'])){
                             $idnum=$_SESSION["id"];
                             $name=$_SESSION["name"];
 
-                            if(isset($_GET['grade'])){
-                              $level=$_GET['grade'];
-                            } else {
-                              $level=1;
-                            }
+                            $level=$_GET['grade'];
 
                             $table=mysqli_query($mysqli,"SELECT * FROM grades WHERE student_id='".$idnum."' AND grade_level =".$level." AND active = 1");
 
@@ -125,31 +120,36 @@ if(!isset($_SESSION['name'])){
                                                     <th>Average</th>
                                             </thead>
                                             <tbody>";
-
+                        $i=1;
                         while($row=mysqli_fetch_array($table)){
                           $subject=mysqli_query($mysqli, "SELECT * FROM SUBJECTS WHERE subj_id =".$row[1]."");
                           $subj=mysqli_fetch_array($subject);
-                          $avg=($row[4]+$row[5]+$row[6]+$row[7])/4;
+                          $first=round($row[4]);
+                          $second=round($row[5]);
+                          $third=round($row[6]);
+                          $fourth=round($row[7]);
+                          $avg=($first + $second + $third + $fourth)/4;
                             echo "<tr>
                                     <td>
                                       $subj[1]
                                     </td>
                                     <td>
-                                      <center><span data-toggle='modal' data-target='#model'>$row[4]</span></center>
+                                      <center><a href='viewbreak.php?grad=".$_GET['grade']."&subjid=".$i."&gper=1' style='text-decoration:none; color: black'>$first</a></center>
                                     </td>
                                     <td>
-                                      <center><span data-toggle='modal' data-target='#model'>$row[5]</span></center>
+                                      <center><a href='viewbreak.php?grad=".$_GET['grade']."&subjid=".$i."&gper=2' style='text-decoration:none; color: black'>$second</a></center>
                                     </td>
                                     <td>
-                                      <center><span data-toggle='modal' data-target='#model'>$row[6]</span></center>
+                                      <center><a href='viewbreak.php?grad=".$_GET['grade']."&subjid=".$i."&gper=3' style='text-decoration:none; color: black'>$third</a></center>
                                     </td>
                                     <td>
-                                      <center><span data-toggle='modal' data-target='#model'>$row[7]</span></center>
+                                      <center><a href='viewbreak.php?grad=".$_GET['grade']."&subjid=".$i."&gper=4' style='text-decoration:none; color: black'>$fourth</a></center>
                                     </td>
                                     <td>
                                       <center>$avg</center>
                                     </td>
                                   </tr>";
+                                  $i++;
                         }                        
                               
                          echo "</tbody></table></div>";     
@@ -162,84 +162,6 @@ if(!isset($_SESSION['name'])){
             <!-- /.conainer-fluid -->
         </main>
     </div>
-
-<div class="modal" id="model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><strong>Grade Breakdown</strong></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <div class="card">
-              <div class="card-header"><strong>Homeworks and Assignments</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead>
-                  </table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Seatworks</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead></table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Quizzes</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                          <th>1</th>
-                          <th>2</th>
-                          <th>3</th>
-                          <th>4</th>
-                          <th>5</th>
-                      </thead></table>
-              </div>
-          </div>
-          <div class="card">
-              <div class="card-header"><strong>Projects and Major Exams</strong></div>
-              <div class="card-block">
-                  <table class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th colspan="3"><center>Projects</center></th>
-                          <th rowspan="2"><center>Midterm</center></th>
-                          <th rowspan="2"><center>Periodical</center></th>
-                        </tr>
-                        <tr>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>
-                        </tr>
-                      </thead>
-                  </table>
-              </div>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button data-dismiss="modal" type="button" class="btn btn-primary">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
-
     <footer class="app-footer">
 
     </footer>
@@ -264,10 +186,6 @@ if(!isset($_SESSION['name'])){
 
     <script src="js/app.js"></script>
 
-
-
-
-
     <!-- Plugins and scripts required by this views -->
 
     <!-- Custom scripts required by this view -->
@@ -276,3 +194,10 @@ if(!isset($_SESSION['name'])){
 </body>
 
 </html>
+
+<script>
+$(document).on("click", ".open", function () {
+     var data = $(this).data('id');
+     $(".modal-body .table #num").html(data);
+});
+</script>

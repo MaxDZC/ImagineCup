@@ -1,14 +1,14 @@
+<?php
+session_start();
+include("sql_connect.php");
 
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+if(!isset($_SESSION['name'])) {
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -30,8 +30,6 @@
 
 </head>
 
-
-
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header.php"); ?>
@@ -40,27 +38,14 @@
     <div class="app-body">
         <?php include("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Assessment Report</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item active">View</li>
-
-                <!-- Breadcrumb Menu-->
-                <!-- <li class="breadcrumb-menu hidden-md-down">
-                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <a class="btn btn-secondary" href="#"><i class="icon-speech"></i></a>
-                        <a class="btn btn-secondary" href="./"><i class="icon-graph"></i> &nbsp;Dashboard</a>
-                        <a class="btn btn-secondary" href="#"><i class="icon-settings"></i> &nbsp;Settings</a>
-                    </div>
-                </li> -->
             </ol>
-
-
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">

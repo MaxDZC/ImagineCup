@@ -41,10 +41,10 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Management</li>
                 <li class="breadcrumb-item active">Subscriptions</li>

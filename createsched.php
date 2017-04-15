@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])) {
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,27 +31,6 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
-
-// Header options
-1. '.header-fixed'                  - Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'                 - Fixed Sidebar
-2. '.sidebar-hidden'                - Hidden Sidebar
-3. '.sidebar-off-canvas'        - Off Canvas Sidebar
-4. '.sidebar-compact'               - Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'          - Fixed Aside Menu
-2. '.aside-menu-hidden'         - Hidden Aside Menu
-3. '.aside-menu-off-canvas' - Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'                      - Fixed footer
-
--->
-
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header-admin.php"); ?>
@@ -58,19 +39,11 @@
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
 
-        <!-- Main content -->
         <main class="main">
-
-            <!-- Breadcrumb -->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Admin Tasks</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item active">Schedule Plot</li>
-
-                
             </ol>
-
 
             <div class="container-fluid">
                 <div class="row col-lg-16 card">
@@ -88,16 +61,85 @@
                             </thead>
                             <tbody>
                                 <?php 
+                                  $table=mysqli_query($mysqli, "SELECT * FROM schedule WHERE active = 1");
+                                  while($row=mysqli_fetch_array($table)){
+                                    $subjT=mysqli_query($mysqli, "SELECT subject FROM subjects WHERE subj_id = ".$row[1]."");
+                                    $subj=mysqli_fetch_array($subjT);
 
-                                            $mysqli=new mysqli("localhost","root","","oneschool");
-                                            $table=mysqli_query($mysqli,"SELECT*FROM schedule");
-                                            while($row=mysqli_fetch_array($table)){
-                                                echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td>
-                                                    <td>".$row[2]."</td><td>".$row[3].
-                                                    "</td>
-                                                    <td><button class='btn btn-sm btn-success'><i class='icon-check'></i> Update</button> <a href='data11.php?level=".$row[0]."&subj=".$row[1]."&sched=".$row[2]."'><button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button></a></td></tr>";
-                                            }
-                                        ?>
+                                    $date=date("h:i A", strtotime($row[3]))." - ".date("h:i A", strtotime($row[4]));
+                                    $days= "";
+
+                                    if($row[5] & 1){
+                                        $days = "M";
+                                    }
+
+                                    if($row[5] & 2){
+                                        $days .= "T";
+                                    }                                                
+
+                                    if($row[5] & 4){
+                                        $days .= "W";
+                                    }
+
+                                    if($row[5] & 8){
+                                        $days .= "TH";
+                                    }  
+                                    
+                                    if($row[5] & 16){
+                                        $days .= "F";
+                                    }
+
+                                    if($row[5] & 32){
+                                        $days .= "Sat";
+                                    } 
+
+                                    if($row[5] & 64){
+                                        $days .= "Sun";
+                                    }
+
+                                    $date .= " ".$days;
+
+                                    $classT=mysqli_query($mysqli, "SELECT teacher_id FROM class WHERE sched_id = ".$row[0]." and active = 1");
+                                    $class=mysqli_fetch_array($classT);
+
+                                    $teacherT=mysqli_query($mysqli, "SELECT t_fName, t_mName, t_lName FROM teacher WHERE teacher_id = '".$class[0]."'");
+
+                                    if(mysqli_num_rows($teacherT) == 1) {
+                                      $teacher=mysqli_fetch_array($teacherT);
+                                      $name = $teacher[2].", ".$teacher[0];
+                                      if($teacher[1]) {
+                                        $name .= " ".$teacher[1][0].".";
+                                      }
+                                    } else {
+                                      $name = "No Teacher Yet";
+                                    }
+
+                                    echo "<tr>
+                                            <td>
+                                              <center>".$row[2]."</center>
+                                            </td>
+                                            <td>
+                                              ".$subj[0]."
+                                            </td>
+                                            <td>
+                                              ".$date."
+                                            </td>
+                                            <td>
+                                              ".$name."
+                                            </td>
+                                            <td>
+                                              <button class='btn btn-sm btn-success'>
+                                                <i class='icon-check'></i> Update
+                                              </button> 
+
+                                              <a href='data11.php?level=".$row[0]."&subj=".$row[1]."&sched=".$row[2]."'>
+                                              <button class='btn btn-sm btn-danger'>
+                                                <i class='icon-minus'></i> Delete
+                                              </button></a>
+                                            </td>
+                                            </tr>";
+                                  }
+                              ?>
                             </tbody>
                         </table>
                         <button class="btn btn-md btn-primary" data-toggle="modal" data-target="#addstud"><i class="icon-plus"></i> Add Schedule</button>                        
@@ -106,7 +148,7 @@
             </div>
             <!-- /.conainer-fluid -->
         </main>
-
+        
 <div class="modal" id="addstud" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">

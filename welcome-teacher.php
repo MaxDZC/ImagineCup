@@ -1,10 +1,14 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])){
+    header("location: index.php");
+}
+
+$ann=mysqli_query($mysqli, "SELECT * FROM ANNOUNCEMENT WHERE active = 1");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,31 +43,17 @@
     <div class="app-body">
         <?php include("sidebar-teacher.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item active">Welcome</li>
-
-                
             </ol>
 
 
             <div class="container-fluid">
-                <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-inverse card-primary">
-                        <div class="card-header">
-                            Welcome, <?php echo $_GET["name"];?>!
-                        </div>
-                        <div class="card-block"></div>
-                    </div>
-                </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
@@ -71,53 +61,42 @@
                                  <i class="fa fa-align-justify"></i> News and Announcements
                             </div>
                             <div class="card-block">
-                                    <table class="table table-bordered table-striped table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Date Published</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><a href="#">One School S.Y. 2017-2018 is now open!</a></td>
-                                                <td>2017/06/13</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><a href="#">Enrolment schedule has been posted!</a></td>
-                                                <td>2017/04/13</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><a href="#">Have nothing to do this summer? Apply for summer class... </a></td>
-                                                <td>2017/04/01</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><a href="#">Congratulations, Dear Graduates!</a></td>
-                                                <td>2017/03/29</td>
-                                                
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <nav>
-                                        <ul class="pagination">
-                                            <li class="page-item"><a class="page-link" href="#">Prev</a>
-                                            </li>
-                                            <li class="page-item active">
-                                                <a class="page-link" href="#">1</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">4</a>
-                                            </li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                    <?php
+                      $num=mysqli_num_rows($ann);
+                    ?>
+                    <?php
+                      if($num != 0){
+                        echo '<table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date Published</th>
+                            </tr>
+                        </thead><tbody>';
+
+                        while($anns=mysqli_fetch_row($ann)){
+                            $date=date("Y/m/d", strtotime($anns[4]));
+                            echo '<tr>
+                                    <td>
+                                      <a href="#">
+                                        '.$anns[2].'
+                                      </a>
+                                    </td>
+                                    <td>
+                                      '.$date.'
+                                    </td>
+                                </tr>';
+                        }
+
+                        echo '</tbody>';
+                      } else {
+                        echo "There are no announcements to display!";
+                      }
+
+                      if($num != 0){
+                        echo "</table>";
+                      }
+                    ?>
                                 </div>
                         </div>
                     </div>
@@ -125,295 +104,6 @@
             </div>
             <!-- /.conainer-fluid -->
         </main>
-
-        <aside class="aside-menu">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"><i class="icon-list"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab"><i class="icon-speech"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#settings" role="tab"><i class="icon-settings"></i></a>
-                </li>
-            </ul>
-
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div class="tab-pane active" id="timeline" role="tabpanel">
-                    <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
-                        <small><b>Today</b>
-                        </small>
-                    </div>
-                    <hr class="transparent mx-1 my-0">
-                    <div class="callout callout-warning m-0 py-1">
-                        <div class="avatar float-right">
-                            <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                        </div>
-                        <div>Meeting with
-                            <strong>Lucas</strong>
-                        </div>
-                        <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
-                        <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA</small>
-                    </div>
-                    <hr class="mx-1 my-0">
-                    <div class="callout callout-info m-0 py-1">
-                        <div class="avatar float-right">
-                            <img src="img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                        </div>
-                        <div>Skype with
-                            <strong>Megan</strong>
-                        </div>
-                        <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 4 - 5pm</small>
-                        <small class="text-muted"><i class="icon-social-skype"></i>&nbsp; On-line</small>
-                    </div>
-                    <hr class="transparent mx-1 my-0">
-                    <div class="callout m-0 py-h text-muted text-center bg-faded text-uppercase">
-                        <small><b>Tomorrow</b>
-                        </small>
-                    </div>
-                    <hr class="transparent mx-1 my-0">
-                    <div class="callout callout-danger m-0 py-1">
-                        <div>New UI Project -
-                            <strong>deadline</strong>
-                        </div>
-                        <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 10 - 11pm</small>
-                        <small class="text-muted"><i class="icon-home"></i>&nbsp; creativeLabs HQ</small>
-                        <div class="avatars-stack mt-h">
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="mx-1 my-0">
-                    <div class="callout callout-success m-0 py-1">
-                        <div>
-                            <strong>#10 Startups.Garden</strong>Meetup</div>
-                        <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 1 - 3pm</small>
-                        <small class="text-muted"><i class="icon-location-pin"></i>&nbsp; Palo Alto, CA</small>
-                    </div>
-                    <hr class="mx-1 my-0">
-                    <div class="callout callout-primary m-0 py-1">
-                        <div>
-                            <strong>Team meeting</strong>
-                        </div>
-                        <small class="text-muted mr-1"><i class="icon-calendar"></i>&nbsp; 4 - 6pm</small>
-                        <small class="text-muted"><i class="icon-home"></i>&nbsp; creativeLabs HQ</small>
-                        <div class="avatars-stack mt-h">
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                            <div class="avatar avatar-xs">
-                                <img src="img/avatars/8.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="mx-1 my-0">
-                </div>
-                <div class="tab-pane p-1" id="messages" role="tabpanel">
-                    <div class="message">
-                        <div class="py-1 pb-3 mr-1 float-left">
-                            <div class="avatar">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                <span class="avatar-status badge-success"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lukasz Holeczek</small>
-                            <small class="text-muted float-right mt-q">1:52 PM</small>
-                        </div>
-                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
-                    </div>
-                    <hr>
-                    <div class="message">
-                        <div class="py-1 pb-3 mr-1 float-left">
-                            <div class="avatar">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                <span class="avatar-status badge-success"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lukasz Holeczek</small>
-                            <small class="text-muted float-right mt-q">1:52 PM</small>
-                        </div>
-                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
-                    </div>
-                    <hr>
-                    <div class="message">
-                        <div class="py-1 pb-3 mr-1 float-left">
-                            <div class="avatar">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                <span class="avatar-status badge-success"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lukasz Holeczek</small>
-                            <small class="text-muted float-right mt-q">1:52 PM</small>
-                        </div>
-                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
-                    </div>
-                    <hr>
-                    <div class="message">
-                        <div class="py-1 pb-3 mr-1 float-left">
-                            <div class="avatar">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                <span class="avatar-status badge-success"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lukasz Holeczek</small>
-                            <small class="text-muted float-right mt-q">1:52 PM</small>
-                        </div>
-                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
-                    </div>
-                    <hr>
-                    <div class="message">
-                        <div class="py-1 pb-3 mr-1 float-left">
-                            <div class="avatar">
-                                <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                <span class="avatar-status badge-success"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lukasz Holeczek</small>
-                            <small class="text-muted float-right mt-q">1:52 PM</small>
-                        </div>
-                        <div class="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</small>
-                    </div>
-                </div>
-                <div class="tab-pane p-1" id="settings" role="tabpanel">
-                    <h6>Settings</h6>
-
-                    <div class="aside-options">
-                        <div class="clearfix mt-2">
-                            <small><b>Option 1</b>
-                            </small>
-                            <label class="switch switch-text switch-pill switch-success switch-sm float-right">
-                                <input type="checkbox" class="switch-input" checked="">
-                                <span class="switch-label" data-on="On" data-off="Off"></span>
-                                <span class="switch-handle"></span>
-                            </label>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
-                        </div>
-                    </div>
-
-                    <div class="aside-options">
-                        <div class="clearfix mt-1">
-                            <small><b>Option 2</b>
-                            </small>
-                            <label class="switch switch-text switch-pill switch-success switch-sm float-right">
-                                <input type="checkbox" class="switch-input">
-                                <span class="switch-label" data-on="On" data-off="Off"></span>
-                                <span class="switch-handle"></span>
-                            </label>
-                        </div>
-                        <div>
-                            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
-                        </div>
-                    </div>
-
-                    <div class="aside-options">
-                        <div class="clearfix mt-1">
-                            <small><b>Option 3</b>
-                            </small>
-                            <label class="switch switch-text switch-pill switch-success switch-sm float-right">
-                                <input type="checkbox" class="switch-input">
-                                <span class="switch-label" data-on="On" data-off="Off"></span>
-                                <span class="switch-handle"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="aside-options">
-                        <div class="clearfix mt-1">
-                            <small><b>Option 4</b>
-                            </small>
-                            <label class="switch switch-text switch-pill switch-success switch-sm float-right">
-                                <input type="checkbox" class="switch-input" checked="">
-                                <span class="switch-label" data-on="On" data-off="Off"></span>
-                                <span class="switch-handle"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <h6>System Utilization</h6>
-
-                    <div class="text-uppercase mb-q mt-2">
-                        <small><b>CPU Usage</b>
-                        </small>
-                    </div>
-                    <div class="progress progress-xs">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <small class="text-muted">348 Processes. 1/4 Cores.</small>
-
-                    <div class="text-uppercase mb-q mt-h">
-                        <small><b>Memory Usage</b>
-                        </small>
-                    </div>
-                    <div class="progress progress-xs">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <small class="text-muted">11444GB/16384MB</small>
-
-                    <div class="text-uppercase mb-q mt-h">
-                        <small><b>SSD 1 Usage</b>
-                        </small>
-                    </div>
-                    <div class="progress progress-xs">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <small class="text-muted">243GB/256GB</small>
-
-                    <div class="text-uppercase mb-q mt-h">
-                        <small><b>SSD 2 Usage</b>
-                        </small>
-                    </div>
-                    <div class="progress progress-xs">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <small class="text-muted">25GB/256GB</small>
-                </div>
-            </div>
-        </aside>
-
-
     </div>
 
     <footer class="app-footer">

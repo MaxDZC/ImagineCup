@@ -1,2 +1,2 @@
 <?php
-echo "Unable to connect to the database."
+echo "There is an error wiith the database.";

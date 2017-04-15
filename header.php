@@ -9,16 +9,25 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <img src="img/student.png" class="img-avatar">
+                    <img src="
+                    <?php
+                        $avaT=mysqli_query($mysqli, "SELECT s_idPic FROM student WHERE student_id = '".$_SESSION['id']."'");
+                        $ava=mysqli_fetch_array($avaT);
+
+                        if($ava[0]) {
+                            echo $ava[0];
+                        } else {
+                            echo "img/student.png";
+                        }        
+                    ?>
+                    " class="img-avatar">
                     <span class="hidden-md-down"><?php echo $_SESSION["name"];?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-
                     <div class="dropdown-header text-center">
                         <strong>Account</strong>
                     </div>
-
-                    <a class="dropdown-item" href="studentprofile.php?id=<?php echo $_SESSION["id"];?>&name=<?php echo $_SESSION["name"];?>"><i class="fa fa-user"></i> Profile</a>
+                    <a class="dropdown-item" href="studentprofile.php"><i class="fa fa-user"></i> Profile</a>
                     <a class="dropdown-item" href="logout.php"><i class="fa fa-lock"></i> Logout</a>
                 </div>
             </li>

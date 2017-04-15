@@ -1,15 +1,15 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])) {
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,11 +26,7 @@
 
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
-
 </head>
-
-
-
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header-teacher.php"); ?>
@@ -39,17 +35,13 @@
     <div class="app-body">
         <?php include("sidebar-teacher.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Class Schedule</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
-                <li class="breadcrumb-item active">Manage</li>
-
-                
+                <li class="breadcrumb-item active">Manage</li>                
             </ol>
 
 
@@ -72,17 +64,62 @@
                                 </thead>
                                 <tbody>
                                     <?php   
-                                        $teacher=$_GET["name"];
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
+                                        $teacher=$_SESSION["name"];
+                                        $id=mysqli_real_escape_string($mysqli, $_SESSION["id"]);
 
-                                        $table=mysqli_query($mysqli,"SELECT* FROM schedule WHERE teacher='$teacher'");
+                                        $stmt="SELECT * FROM class WHERE teacher_id = '$id' AND active = 1";
+                                        $table=mysqli_query($mysqli, $stmt);
 
-                                        while($row=mysqli_fetch_array($table)){
+                                        while($row=mysqli_fetch_array($table)) {
+                                          $schedT=mysqli_query($mysqli, "SELECT * FROM schedule WHERE sched_id = ".$row[1]." AND active = 1");
+                                          $sched=mysqli_fetch_array($schedT);
+
+                                          $subjT=mysqli_query($mysqli, "SELECT subject FROM subjects WHERE subj_id = ".$sched[1]."");
+                                          $subj=mysqli_fetch_array($subjT);
+
+                                          $date=date("h:i A", strtotime($sched[3]))." - ".date("h:i A", strtotime($sched[4]));
+                                          $days= "";
+
+                                          if($sched[5] & 1){
+                                              $days = "M";
+                                          }
+
+                                          if($sched[5] & 2){
+                                              $days .= "T";
+                                          }                                                
+
+                                          if($sched[5] & 4){
+                                              $days .= "W";
+                                          }
+
+                                          if($sched[5] & 8){
+                                              $days .= "TH";
+                                          }  
+                                          
+                                          if($sched[5] & 16){
+                                              $days .= "F";
+                                          }
+
+                                          if($sched[5] & 32){
+                                              $days .= "Sat";
+                                          } 
+
+                                          if($sched[5] & 64){
+                                              $days .= "Sun";
+                                          }
+
+                                          $date .= " ".$days;
+
+                                          $secT=mysqli_query($mysqli, "SELECT section_name FROM subsection WHERE sec_id =".$row[3]."");
+                                          $sec=mysqli_fetch_array($secT);
+
                                          echo "<tr>
-                                                <td>".$row[0]." - ".$row[1]."</td>
-                                                <td>".$row[2]."</td>
-                                                <td>".$row[4]."</td>
-                                                <td><a href='data8.php?level=".$row[0]."&subj=".$row[1]."&sched=".$row[2]."&teacher=".$_GET["name"]."'<button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button>
+                                                <td>".$subj[0]."</td>
+                                                <td>".$date."</td>
+                                                <td>".$sec[0]."</td>
+                                                <td>
+                                                  <a href='deleteSched.php?id=".$row[0]."'><button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button>
+                                                  </a>
                                             </tr>";   
                                         }
 
@@ -120,16 +157,15 @@
                 </thead>
                 <tbody>
                 <?php   
-                      $mysqli=new mysqli("localhost","root","","oneschool");
-                      $table=mysqli_query($mysqli,"SELECT* FROM schedule WHERE teacher=''");
-                      while($row=mysqli_fetch_array($table)){
-                          echo '<tr>
-                                    <td>'.$row[0].' '.$row[1].'</td>
-                                    <td>'.$row[2].'</td>
-                                    <td>'.$row[4].'</td>
-                                    <td><a href="data7.php?level='.$row[0].'&subject='.$row[1].'&sched='.$row[2].'&teach='.$_GET["name"].'"><button role="select" class="btn btn-sm btn-warning"><i class="icon-minus"></i> Select</button></a>
-                                    </tr>';   
-                                        }
+                  $table2=mysqli_query($mysqli,"SELECT* FROM schedule WHERE teacher=''");
+                  while($row=mysqli_fetch_array($table2)){
+                    echo '<tr>
+                    <td>'.$row[0].' '.$row[1].'</td>
+                    <td>'.$row[2].'</td>
+                    <td>'.$row[4].'</td>
+                    <td><a href="data7.php?level='.$row[0].'&subject='.$row[1].'&sched='.$row[2].'&teach='.$_GET["name"].'"><button role="select" class="btn btn-sm btn-warning"><i class="icon-minus"></i> Select</button></a>
+                    </tr>';   
+                  }
                 ?>
 
 
@@ -162,7 +198,7 @@
 </div>
 
         
-    </div>
+    </div> 
 
     <footer class="app-footer">
 

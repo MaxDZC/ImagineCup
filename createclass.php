@@ -1,10 +1,12 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+<?php
+session_start();
+include("sql_connect.php");
+
+if(!isset($_SESSION['name'])) {
+    header("location: index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,55 +29,19 @@
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
 
-
-
 </head>
-
-<!-- BODY options, add following classes to body to change options
-
-// Header options
-1. '.header-fixed'                  - Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'                 - Fixed Sidebar
-2. '.sidebar-hidden'                - Hidden Sidebar
-3. '.sidebar-off-canvas'        - Off Canvas Sidebar
-4. '.sidebar-compact'               - Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'          - Fixed Aside Menu
-2. '.aside-menu-hidden'         - Hidden Aside Menu
-3. '.aside-menu-off-canvas' - Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'                      - Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header-admin.php"); ?>
     </header>
-
-
-
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
-
-        <!-- Main content -->
         <main class="main">
-
-            <!-- Breadcrumb -->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Admin Tasks</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
                 <li class="breadcrumb-item active">Create Class</li>
-
-                
             </ol>
-
-
             <div class="container-fluid">
                 <div class="row col-lg-16 card">
                     <div class="card-header">
@@ -92,14 +58,41 @@
                             </thead>
                             <tbody>
                             <?php 
-                                $mysqli=new mysqli("localhost","root","","oneschool");
-                                $table=mysqli_query($mysqli,"SELECT * FROM class");
+                                $table=mysqli_query($mysqli,"SELECT * FROM subsection");
                                 while($row=mysqli_fetch_array($table)){
-                                    echo "<tr><td>".$row[0]."</td><td>
-                                    ".$row[1]."</td><td>".$row[2]."</td><td>
-                                    ".$row[4]."/".$row[3]."</td><td>
-                                    <a href='viewmodal.php?level=".$row[0]."&sect=".$row[1]."'><button class='btn btn-sm btn-success'><i class='fa fa-circle-o'></i> View</button></a> <a href='data14.php?level=".$row[0]."&sect=".$row[1]."'><button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button></a>
-                                    </td></tr>";
+                                  $teacherT=mysqli_query($mysqli, "SELECT t_fName, t_mName, t_lName FROM teacher WHERE teacher_id = '".$row[1]."'");
+                                  $adv=mysqli_fetch_array($teacherT);
+
+                                  $name=$adv[2].", ".$adv[0];
+                                  if($adv[1]) {
+                                    $name .= " ".$adv[1][0].".";
+                                  }
+
+                                  $classT=mysqli_query($mysqli, "SELECT class_id FROM class WHERE sec_id = ".$row[0]." AND active = 1");
+                                  $classArray = array();
+                                  while($class=mysqli_fetch_array($classT)) {
+                                    array_push($classArray, $class[0]);
+                                  }
+                                  $answer=implode(", ", $classArray);
+
+                                  $enrolledT=mysqli_query($mysqli, "SELECT COUNT(*) FROM section WHERE class_id IN ($answer) ");
+                                  $enrolled=mysqli_fetch_array($enrolledT);
+
+                                  echo "<tr>
+                                          <td>
+                                            ".$row[2]."
+                                          </td>
+                                          <td>
+                                            ".$row[3]."
+                                          </td>
+                                          <td>
+                                            ".$name."
+                                          </td>
+                                          <td>
+                                            ".$enrolled[0]."/".$row[4]."
+                                          </td><td>
+                                  <a href='viewmodal.php?level=".$row[0]."&sect=".$row[1]."'><button class='btn btn-sm btn-success'><i class='fa fa-circle-o'></i> View</button></a> <a href='data14.php?level=".$row[0]."&sect=".$row[1]."'><button class='btn btn-sm btn-danger'><i class='icon-minus'></i> Delete</button></a>
+                                  </td></tr>";
                                 }
 
                             ?>

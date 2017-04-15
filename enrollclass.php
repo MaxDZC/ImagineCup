@@ -40,10 +40,10 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
     <?php require("sidebar.php"); ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Enrolment System</li>
                 <li class="breadcrumb-item active"><?php 
@@ -59,7 +59,8 @@ if(!isset($_SESSION['name'])){
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                            <div class="card-header"></i><strong> Class Schedule</strong>
+                            <div class="card-header"></i><strong> Class Schedule
+                                <?php if($select[5]) { echo " - Section ".$select[5]; } ?></strong>
                             </div>
                             <div class="card-block">
                                     <table class="table table-bordered table-striped table-condensed">
@@ -132,8 +133,7 @@ if(!isset($_SESSION['name'])){
                                                 }
                                         ?>
                                             
-                                        </tbody>
-                        
+                                          </tbody>
                                         </table>
                                         <div class="card-footer">
                                             <button data-toggle="modal" data-target="#enrollsched" class="btn btn-md btn-success"><i class="icon-plus"></i> Enroll</button>

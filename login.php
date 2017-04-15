@@ -35,7 +35,7 @@
               <div class="input-group mb-1">
                 <span class="input-group-addon"><i class="icon-user"></i>
                 </span>
-                <input type="text" id="id" name="id" class="form-control" placeholder="ID Number">
+                <input type="text" id="id" name="id" class="form-control" placeholder="ID Number" autocomplete="off">
               </div>
               <div class="input-group mb-2">
                 <span class="input-group-addon"><i class="icon-lock"></i>

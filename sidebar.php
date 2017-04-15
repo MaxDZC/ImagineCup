@@ -8,7 +8,7 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-note"></i>Student Tasks</a>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item">
-                                <a class="nav-link" href="viewgrades.php"><i class="icon-arrow-right-circle"></i>Gradebook</a>
+                                <a class="nav-link" href="viewgrades.php?grade=1"><i class="icon-arrow-right-circle"></i>Gradebook</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="enrollclass.php"><i class="icon-arrow-right-circle"></i>Enroll Class</a>

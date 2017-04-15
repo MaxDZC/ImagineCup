@@ -1,10 +1,4 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.4
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,26 +23,7 @@
 
 </head>
 
-<!-- BODY options, add following classes to body to change options
 
-// Header options
-1. '.header-fixed'                  - Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'                 - Fixed Sidebar
-2. '.sidebar-hidden'                - Hidden Sidebar
-3. '.sidebar-off-canvas'        - Off Canvas Sidebar
-4. '.sidebar-compact'               - Compact Sidebar Navigation (Only icons)
-
-// Aside options
-1. '.aside-menu-fixed'          - Fixed Aside Menu
-2. '.aside-menu-hidden'         - Hidden Aside Menu
-3. '.aside-menu-off-canvas' - Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'                      - Fixed footer
-
--->
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <?php include ("record.php"); ?>
@@ -59,14 +34,13 @@
     <div class="app-body">
         <?php include("sidebar-teacher.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Class Record</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item"><?php echo $_GET["level"].' - '.$_GET["section"];?></li>
                 <li class="breadcrumb-item active"><?php echo $_GET["stud"]?></li>
                 

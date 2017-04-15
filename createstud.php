@@ -41,14 +41,13 @@ if(!isset($_SESSION['name'])){
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Admin Tasks</li>
-                <!-- <li class="breadcrumb-item"><a href="#">Admin</a>
-                </li> -->
+
                 <li class="breadcrumb-item active">Student Creation</li>
 
                 
@@ -73,7 +72,7 @@ if(!isset($_SESSION['name'])){
                                   $table=mysqli_query($mysqli,"SELECT*FROM student WHERE active = 1");
 
                                   while($row=mysqli_fetch_array($table)){
-                                    $name=$row[4].", ".$row[2]." ".$row[3][0].".";
+                                    $name=$row[4].", ".$row[2]." "; if($row[3]) { $name.=$row[3][0]."."; };
                                     echo "<tr>
                                             <td>
                                               ".$row[0]."

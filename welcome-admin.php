@@ -6,7 +6,7 @@ if(!isset($_SESSION['name'])){
     header("location: index.php");
 }
 
-$ann=mysqli_query($mysqli, "SELECT * FROM announcement");
+$ann=mysqli_query($mysqli, "SELECT * FROM announcement WHERE active = 1");
 
 ?>
 <!DOCTYPE html>
@@ -43,10 +43,10 @@ $ann=mysqli_query($mysqli, "SELECT * FROM announcement");
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
 
-        <!-- Main content -->
+        
         <main class="main">
 
-            <!-- Breadcrumb -->
+            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
                 <li class="breadcrumb-item active">Welcome</li>

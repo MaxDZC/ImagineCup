@@ -2,32 +2,46 @@
             <nav class="sidebar-nav">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="welcome-teacher.php?name=<?php echo $_GET["name"];?>"><i class="icon-home"></i> Home </a>
+                        <a class="nav-link" href="welcome-teacher.php"><i class="icon-home"></i> Home </a>
                     </li>
                     <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-note"></i>Teacher Tasks</a>
                         <ul class="nav-dropdown-items">
                             <li class="nav-item">
-                                <a class="nav-link" href="manage-class.php?name=<?php echo $_GET["name"];?>"><i class="icon-arrow-right-circle"></i>Schedule</a>
+                                <a class="nav-link" href="manage-class.php"><i class="icon-arrow-right-circle"></i>Schedule</a>
                             </li>
-                            <li class="nav-item nav-dropdown">
+                            <?php
+                              $sideT=mysqli_query($mysqli, "SELECT sched_id, sec_id FROM class WHERE teacher_id = '".$_SESSION['id']."'");
+
+                              if(mysqli_num_rows($sideT) != 0) {
+                                echo '<li class="nav-item nav-dropdown">
                                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-arrow-right-circle"></i>Gradebook</a>
-                                <ul class="nav-dropdown-items">
-                                    <?php 
-                                        $teacher=$_GET["name"];
-                                        $mysqli=new mysqli("localhost","root","","oneschool");
-                                        $table=mysqli_query($mysqli,"SELECT * FROM schedule where teacher='$teacher'");
-                                        while($row=mysqli_fetch_array($table)){
-                                            echo "
-                                    <li class='nav-item'><a class='nav-link' href='updaterecord-2.php?name=$teacher&level=$row[0]&section=$row[4]&subj=$row[1]&prd=First Grading'><i class='icon-minus'></i>".$row[4]." : ".$row[1]."</a></li>";
-                                        }
-                                    ?>
+                                  <ul class="nav-dropdown-items">'; 
 
+                                  while($side=mysqli_fetch_array($sideT)) {
+                                    $sectionT=mysqli_query($mysqli, "SELECT section_name FROM subsection WHERE sec_id = ".$side[1]." ");
+                                    $section=mysqli_fetch_array($sectionT);
 
-                                </ul>
-                            </li>
+                                    $schedT=mysqli_query($mysqli, "SELECT subj_id FROM schedule WHERE sched_id = ".$side[0]." ");
+                                    $sched=mysqli_fetch_array($schedT);
+
+                                    $subjT=mysqli_query($mysqli, "SELECT subject FROM subjects WHERE subj_id = ".$sched[0]." ");
+                                    $subj=mysqli_fetch_array($subjT);
+
+                                    echo "<li class='nav-item'>
+                                            <a class='nav-link' href='updaterecord.php'>
+                                              <i class='icon-minus'></i>
+                                              ".$section[0]." : ".$subj[0]."
+                                            </a>
+                                          </li>";
+                                  }
+
+                                  echo '</ul></li>';
+                              }
+                            ?>
+
                             <li class="nav-item">
-                                <a class="nav-link" href="studentprog.php?name=<?php echo $_GET["name"];?>"><i class="icon-arrow-right-circle"></i>Performance Tracker</a>
+                                <a class="nav-link" href="studentprog.php"><i class="icon-arrow-right-circle"></i>Performance Tracker</a>
                             </li>
                         </ul>
                     </li>
@@ -35,7 +49,7 @@
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-note"></i>Management</a>
                         <ul class="nav-dropdown-items">
                         <li class="nav-item">
-                            <a class="nav-link" href="repository.php?name=<?php echo $_GET["name"];?>"><i class="icon-arrow-right-circle">
+                            <a class="nav-link" href="repository.php"><i class="icon-arrow-right-circle">
                         </i>Repository</a>
                     </li>
                         </ul>
