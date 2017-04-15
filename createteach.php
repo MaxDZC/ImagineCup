@@ -11,7 +11,6 @@ if(!isset($_SESSION['name'])) {
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -74,10 +73,6 @@ if(!isset($_SESSION['name'])) {
                                               ".$name."
                                             </td>
                                             <td>
-                                              <button class='btn btn-sm btn-success'>
-                                                <i class='icon-check'></i> Update
-                                              </button> 
-
                                               <a href='data10.php?idnum=".$row[0]."&name=".$row[1]."'>
                                               <button class='btn btn-sm btn-danger'>
                                                 <i class='icon-minus'></i> Delete
@@ -109,89 +104,78 @@ if(!isset($_SESSION['name'])) {
           <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                                <div class="card-block">
-                                    <form action="data6.php" method="post" enctype="multipart/form-data" class="form-horizontal ">
-                                        <div class="form-group row">
-                                            <label class="col-md-3 form-control-label" for="text-input">Teacher ID</label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="teacherid" name="teacherid" class="form-control" placeholder="Enter Teacher ID">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-3 form-control-label" for="email-input">Teacher Name</label>
-                                            <div class="col-md-9">
-                                                <input type="text" id="teachername" name="teachername" class="form-control" placeholder="Enter Teacher Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-3 form-control-label" for="password-input">Birthdate</label>
-                                            <div class="col-md-3">
-                                                <select class="form-control" id="mm" name="mm" size="2" onchange="month(this.value)">
-                                                    <option value='0'>MM</option>
-                                                    <option value='1'>January</option>
-                                                    <option value='2'>February</option>
-                                                    <option value='3'>March</option>
-                                                    <option value='4'>April</option>
-                                                    <option value='5'>May</option>
-                                                    <option value='6'>June</option>
-                                                    <option value='7'>July</option>
-                                                    <option value='8'>August</option>
-                                                    <option value='9'>September</option>
-                                                    <option value='10'>October</option>
-                                                    <option value='11'>November</option>
-                                                    <option value='12'>December</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select name="dd" class="form-control" id="dd" size="2"></select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select name="yy" class="form-control" id="yy" size="2">
-                                                    <option>1995</option>
-                                                    <option>1994</option>
-                                                    <option>1993</option>
-                                                    <option>1992</option>
-                                                    <option>1991</option>
-                                                    <option>1990</option>
-                                                    <option>1989</option>
-                                                    <option>1987</option>
-                                                    <option>1986</option>
-                                                    <option>1985</option>
-                                                    <option>1984</option>
-                                                    <option>1983</option>
-                                                    <option>1982</option>
-                                                    <option>1981</option>
-                                                    <option>1980</option>
-                                                    <option>1979</option>
-                                                    <option>1978</option>
-                                                    <option>1977</option>
-                                                    <option>1976</option>
-                                                    <option>1975</option>
-                                                    <option>1974</option>
-                                                    <option>1973</option>
-                                                    <option>1972</option>
-                                                    <option>1971</option>
-                                                    <option>1970</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-3 form-control-label" for="password-input">Password</label>
-                                            <div class="col-md-9">
-                                                <input type="password" id="pass" name="pass" class="form-control" placeholder="Enter Password">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-md-3 form-control-label" for="password-input">Confirm Password</label>
-                                            <div class="col-md-9">
-                                                <input type="password" id="passconfirm" name="password-input" class="form-control" placeholder="Re-enter Password">
-                                            </div>
-                                        </div>
-                                    
-                                <div class="card-footer">
-                                    <button onsubmit="validate()" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-                            </div>
-                                    </form>
+                          <div class="card-block">
+                            <form name="createstud" action="insertTeach.php" method="post" enctype="multipart/form-data" class="form-horizontal ">
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">First Name:</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="fname" class="form-control" placeholder="Enter Teacher First Name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Mid Name:</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="mname" class="form-control" placeholder="Enter Teacher Middle Name">
+                                    </div>
+                                </div>
+                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Last Name:</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="lname" class="form-control" placeholder="Enter Teacher Last Name" required>
+                                    </div>
+                                </div>
+                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Address:</label>
+                                    <div class="col-md-9">
+                                        <input type="text" name="address" class="form-control" placeholder="Enter Teacher Address" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Address:</label>
+                                    <div class="col-md-9">
+                                        <input type="email" name="email" class="form-control" placeholder="Enter Teacher Email Address" required>
+                                    </div>
+                                </div>                                
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Birthdate</label>
+                                    <div class="col-md-9">
+                                      <input type="date" name="bday" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Grade Level</label>
+                                    <div class="col-md-9">
+                                        <select name="grade_level" class="form-control" required>
+                                            <option value='' selected>Select Level</option>
+                                            <option value='1'>Grade 1</option>
+                                            <option value='2'>Grade 2</option>
+                                            <option value='3'>Grade 3</option>
+                                            <option value='4'>Grade 4</option>
+                                            <option value='5'>Grade 5</option>
+                                            <option value='6'>Grade 6</option>
+                                            <option value='7'>Grade 7</option>
+                                            <option value='8'>Grade 8</option>
+                                            <option value='9'>Grade 9</option>
+                                            <option value='10'>Grade 10</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label">Gender: </label>
+                                    <div class="col-md-9">
+                                      <label class="col-md-3 form-control-label">Educational Attainment</label>
+                                      <select name="ed_att" class="form-control" required>
+                                        <option value="" selected>Select an Educational Attainment</option>
+                                        <option value="High School">High School Graduate</option>
+                                        <option value="Bachelor">College Undergraduate</option>
+                                        <option value="Master">Master's Graduate</option>
+                                        <option value="Doctorate">PhD Graduate</option>
+                                    </div>
+                                </div>
+                        <div class="card-footer">
+                            <button  type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                    </div>
+                            </form>
                                 </div>
 
                     </div>
@@ -202,40 +186,6 @@ if(!isset($_SESSION['name'])) {
 </div>
 
 </div>
-
-     
-    <script type="text/javascript">
-        function validate(){
-
-        }
-
-
-        var select=document.getElementById('dd');
-
-
-        function month(value){
-            switch(value){
-                case '0': select.innerHTML="<option>DD</option>";
-                          break;
-                case '1':
-                case '3':
-                case '5':
-                case '7':
-                case '8':
-                case '10':
-                case '12': select.innerHTML="<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option><option>31</option>";
-                    break;
-                case '2': select.innerHTML="<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option>";
-                    break;
-                default: select.innerHTML="<option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option><option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>";
-                    break;
-
-            }
-            return value;
-        }
-    </script>
-
-
     </div>
 
     <footer class="app-footer">

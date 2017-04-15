@@ -6,6 +6,9 @@ if(!isset($_SESSION['name'])){
     header("location:index.php");
 }
 
+$gbT=mysqli_query($mysqli, "SELECT * FROM gradebreakdown WHERE admin_id IS NOT NULL AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND active = 1");
+$gb=mysqli_fetch_array($gbT);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,120 +81,103 @@ if(!isset($_SESSION['name'])){
             
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Class Record</li>
-                <li class="breadcrumb-item"><?php echo $_GET["level"].' - '.$_GET["section"];?></li>
-                <li class="breadcrumb-item active"><?php echo $_GET["subj"];?></li>
+                <li class="breadcrumb-item"><?php echo 'Grade '.$_GET["level"].' - '.$_GET["section"];?></li>
+                <li class="breadcrumb-item active"><?php echo $_GET["subject"];?></li>
                 
             </ol>
             <div class="container-fluid">
                 <div class="topnav">
-                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=First Grading"; ?>">First Grading</a>
-                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Second Grading"; ?>">Second Grading</a>
-                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Third Grading"; ?>">Third Grading</a>
-                  <a href="updaterecord-2.php?<?php echo "name=".$_GET["name"]."&level=".$_GET["level"]."&section=".$_GET["section"]."&subj=".$_GET["subj"]."&prd=Fourth Grading"; ?>">Fourth Grading</a>
+                  <a href="updaterecord.php?<?php echo "classid=".$_GET["classid"]."&gper=1&level=".$_GET["level"]."&section=".$_GET["section"]."&subject=".$_GET['subject']."&subj=".$_GET["subj"]; ?>">First Grading</a>
+                  <a href="updaterecord.php?<?php echo "classid=".$_GET["classid"]."&gper=2&level=".$_GET["level"]."&section=".$_GET["section"]."&subject=".$_GET['subject']."&subj=".$_GET["subj"]; ?>">Second Grading</a>
+                  <a href="updaterecord.php?<?php echo "classid=".$_GET["classid"]."&gper=3&level=".$_GET["level"]."&section=".$_GET["section"]."&subject=".$_GET['subject']."&subj=".$_GET["subj"]; ?>">Third Grading</a>
+                  <a href="updaterecord.php?<?php echo "classid=".$_GET["classid"]."&gper=4&level=".$_GET["level"]."&section=".$_GET["section"]."&subject=".$_GET['subject']."&subj=".$_GET["subj"]; ?>">Fourth Grading</a>
                 </div>                                
                 <br>
                 <div class="row">
-                
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                 <strong>Records: <?php echo $_GET["prd"];?></strong>
+                                 <strong>Records: 
+                                  <?php 
+                                    $grading =""; 
+                                    switch($_GET["gper"]) {
+                                      case 1: $grading = "First"; break;
+                                      case 2: $grading = "Second"; break;
+                                      case 3: $grading = "Third"; break;
+                                      case 4: $grading = "Fourth";
+                                    }
+                                    echo " ".$grading." Grading";
+                                  ?></strong>
                             </div>
                             <div class="card-block">
                                 <table class="table table-striped table-bordered">
                                     <thead>
-                                        <tr>
-                                            <th rowspan="2"><center>ID Number</center></th>
-                                            <th colspan="5"><center>HW & A<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT hwa FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
-                                            <th colspan="5"><center>Seatworks<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT sw FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
-                                            <th colspan="5"><center>Quizzes<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT qz FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
-                                            <th colspan="3"><center>Projects<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT prj FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
-                                            <th rowspan="2"><center>Midterms<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT me FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
-                                            <th rowspan="2"><center>Periodicals<?php
-                                              $level=$_GET["level"];
-                                              $subject=$_GET["subj"];
-                                              $mysqli=new mysqli("localhost","root","","oneschool");
-                                              $query=mysqli_query($mysqli,"SELECT fe FROM category WHERE grdlvl='$level' AND subjid='$subject'");
-                                              $section=mysqli_fetch_array($query);
-                                              echo "  (".$section[0]."%)";
-
-                                            ?></center></th>
+                                        <tr align="center">
+                                            <th rowspan="2" valign="middle"><center>ID Number</center></th>
+                                            <th colspan="5"><center>HW & A <?php echo "  (".$gb[9]."%)";?></center></th>
+                                            <th colspan="5"><center>Seatworks <?php echo "  (".$gb[8]."%)"; ?></center></th>
+                                            <th colspan="5"><center>Quizzes<?php echo "  (".$gb[7]."%)"; ?></center></th>
+                                            <th colspan="5"><center>Projects<?php echo "  (".$gb[10]."%)"; ?></center></th>
+                                            <th rowspan="2"><center>Midterms<?php echo "  (".$gb[11]."%)"; ?></center></th>
+                                            <th rowspan="2"><center>Periodicals<?php echo "  (".$gb[12]."%)"; ?></center></th>
                                             <th rowspan="2"><center>Equiv. Grade</center></th>
                                         </tr>
                                         <tr>
-                                          <th>1</th>
-                                          <th>2</th>
-                                          <th>3</th>
-                                          <th>4</th>
-                                          <th>5</th>
-                                          <th>1</th>
-                                          <th>2</th>
-                                          <th>3</th>
-                                          <th>4</th>
-                                          <th>5</th>
-                                          <th>1</th>
-                                          <th>2</th>
-                                          <th>3</th>
-                                          <th>4</th>
-                                          <th>5</th>
-                                          <th>1</th>
-                                          <th>2</th>
-                                          <th>3</th>
+                                        <?php
+                                          for($i=0; $i<4; $i++) {
+                                            for($j=1; $j<6; $j++) {
+                                              echo "<td>".$j."</td>";
+                                            }
+                                          }
+                                        ?>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php 
-                                      $level=$_GET["level"];
-                                      $subj=$_GET["subj"];
-                                      $acc=$_GET["name"];
-                                      $period=$_GET["prd"];
+                                      $table=mysqli_query($mysqli,"SELECT student_id FROM section WHERE class_id = ".$_GET['classid']." AND active = 1");
 
-                                      $mysqli=new mysqli("localhost","root","","oneschool");
-                                      $table=mysqli_query($mysqli,"SELECT * FROM classrecord WHERE gradelevel='$level' AND subject='$subj' AND teacher='$acc' AND gradingper='$period' AND status!='Done'");
-                                      while($row=mysqli_fetch_array($table)){
-                                          $table1=mysqli_query($mysqli,"SELECT grade FROM studentgrading WHERE idnum='$row[1]' AND gradelvl='$row[2]' AND subject='$subj' AND gradingper='$period'");
-                                          $array=mysqli_fetch_array($table1);
-                                          echo "<tr><td>".$row[1]."</td><td>".$row[5]."</td><td>".$row[6]."</td><td>".$row[7]."</td><td>".$row[8]."</td><td>".$row[9]."</td><td>".$row[10]."</td><td>".$row[11]."</td><td>".$row[12]."</td><td>".$row[13]."</td><td>".$row[14]."</td><td>".$row[15]."</td><td>".$row[16]."</td><td>".$row[17]."</td><td>".$row[18]."</td><td>".$row[19]."</td><td>".$row[20]."</td><td>".$row[21]."</td><td>".$row[22]."</td><td><center>".$row[23]."</center></td><td><center>".$row[24]."</center></td><td>".$array[0]."</td></tr>";
+                                      while($row=mysqli_fetch_array($table)) {
+                                        echo "<tr><td>".$row[0]."</td>";
+
+                                        $assignT=mysqli_query($mysqli, "SELECT score FROM assign WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND active = 1 ORDER BY ass_num");
+
+                                          for($i=0; $i<5 && $assign=mysqli_fetch_array($assignT); $i++) {
+                                            echo "<td>".$assign[0]."</td>";
+                                          }
+
+                                        $swT=mysqli_query($mysqli, "SELECT score FROM seatwork WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND active = 1 ORDER BY sw_num");
+
+                                          for($i=0; $i<5 && $sw=mysqli_fetch_array($swT); $i++) {
+                                            echo "<td>".$sw[0]."</td>";
+                                          }      
+
+                                        $quizT=mysqli_query($mysqli, "SELECT score FROM quiz WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND active = 1 ORDER BY quiz_num");
+
+                                          for($i=0; $i<5 && $quiz=mysqli_fetch_array($quizT); $i++) {
+                                            echo "<td>".$quiz[0]."</td>";
+                                          }
+
+                                        $projT=mysqli_query($mysqli, "SELECT score FROM project WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND active = 1 ORDER BY proj_num");
+
+                                          for($i=0; $i<5 && $proj=mysqli_fetch_array($projT); $i++) {
+                                            echo "<td>".$proj[0]."</td>";
+                                          }   
+
+                                        $mexT=mysqli_query($mysqli, "SELECT score FROM exam WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND exam_type='ME' AND active = 1");
+
+                                          $mex=mysqli_fetch_array($mexT);
+                                          echo "<td><center><h5>".$mex[0]."</center></h5></td>";
+
+                                         $pexT=mysqli_query($mysqli, "SELECT score FROM exam WHERE stud_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND grade_per = ".$_GET['gper']." AND exam_type='PE' AND active = 1");
+
+                                          $pex=mysqli_fetch_array($pexT);
+                                          echo "<td><center><h5>".$pex[0]."</center></h5></td>";
+
+                                        $gradeT=mysqli_query($mysqli, "SELECT * FROM grades WHERE student_id ='".$row[0]."' AND subj_id = ".$_GET['subj']." AND grade_level = ".$_GET['level']." AND teacher_id = '".$_SESSION['id']."' AND active = 1");
+
+                                          $grade=mysqli_fetch_array($gradeT);
+                                          echo "<td><center><h5>".round($grade[$_GET['gper'] + 3], 2)."</center></h5></td>";
+
                                       }
 
                                     ?>
