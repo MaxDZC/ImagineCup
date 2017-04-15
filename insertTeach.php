@@ -12,7 +12,6 @@ $lname=$_POST["lname"];
 $address=$_POST["address"];
 $email=$_POST["email"];
 $bday=$_POST["bday"];
-$grade_level=$_POST["grade_level"];
 $ed_att=$_POST["ed_att"];
 
 $id="T".date("ym");
@@ -24,4 +23,8 @@ do {
 
 $id = $tempId;
 
-$insert=mysqli_query($mysqli, "");
+$insert=mysqli_query($mysqli, "INSERT INTO teacher VALUES ('".$id."', '123', '".$fname."', '".$mname."', '".$lname."', '".$address."', '".$email."', '".$bday."', NULL, '".$ed_att."', 1)");
+
+if($insert) {
+    header("location: createteach.php");
+}

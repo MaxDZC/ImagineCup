@@ -39,9 +39,7 @@ if(!isset($_SESSION['name'])) {
         <?php include("sidebar-admin.php") ?>
 
         
-        <main class="main">
-
-            
+        <main class="main">            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Admin Tasks</li>
                 <li class="breadcrumb-item active">Teacher Creation</li>
@@ -131,53 +129,34 @@ if(!isset($_SESSION['name'])) {
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Address:</label>
+                                    <label class="col-md-3 form-control-label">Email Address:</label>
                                     <div class="col-md-9">
                                         <input type="email" name="email" class="form-control" placeholder="Enter Teacher Email Address" required>
                                     </div>
                                 </div>                                
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Birthdate</label>
+                                    <label class="col-md-3 form-control-label">Birthdate:</label>
                                     <div class="col-md-9">
                                       <input type="date" name="bday" class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Grade Level</label>
+                                    <label class="col-md-3 form-control-label">Educational Attainment: </label>
                                     <div class="col-md-9">
-                                        <select name="grade_level" class="form-control" required>
-                                            <option value='' selected>Select Level</option>
-                                            <option value='1'>Grade 1</option>
-                                            <option value='2'>Grade 2</option>
-                                            <option value='3'>Grade 3</option>
-                                            <option value='4'>Grade 4</option>
-                                            <option value='5'>Grade 5</option>
-                                            <option value='6'>Grade 6</option>
-                                            <option value='7'>Grade 7</option>
-                                            <option value='8'>Grade 8</option>
-                                            <option value='9'>Grade 9</option>
-                                            <option value='10'>Grade 10</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Gender: </label>
-                                    <div class="col-md-9">
-                                      <label class="col-md-3 form-control-label">Educational Attainment</label>
                                       <select name="ed_att" class="form-control" required>
                                         <option value="" selected>Select an Educational Attainment</option>
                                         <option value="High School">High School Graduate</option>
                                         <option value="Bachelor">College Undergraduate</option>
                                         <option value="Master">Master's Graduate</option>
                                         <option value="Doctorate">PhD Graduate</option>
+                                      </select>
                                     </div>
                                 </div>
-                        <div class="card-footer">
-                            <button  type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-                    </div>
+                                <div class="card-footer">
+                                  <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+                                </div>
                             </form>
                                 </div>
-
                     </div>
                 </div>        
       </div>

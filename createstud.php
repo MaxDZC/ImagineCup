@@ -142,7 +142,7 @@ if(!isset($_SESSION['name'])){
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Birthdate</label>
+                                    <label class="col-md-3 form-control-label">Birthdate:</label>
                                     <div class="col-md-9">
                                       <input type="date" name="bday" class="form-control" required>
                                     </div>
