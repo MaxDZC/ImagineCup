@@ -29,10 +29,13 @@ if(!isset($_SESSION['name'])){
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
 
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+
 </head>
-
-
-
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header-teacher.php"); ?>
@@ -43,19 +46,11 @@ if(!isset($_SESSION['name'])){
 
         
         <main class="main">
-
-            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Student Progress</li>
-
                 <li class="breadcrumb-item active">View</li>
-
-                
             </ol>
-
-
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-lg-2"></div>
                     <div class="col-lg-8">
@@ -64,20 +59,28 @@ if(!isset($_SESSION['name'])){
                             <form>
                                 <div class="form-group">
                                     <label for="group">Subject and Group</label>
-                                    <select class="form-control" onchange="funct();">
-                                        <option value='0'>Please Select...</option>
-                                </div>
+                                    <select class="form-control" id="drop">
+                                        <option value='' selected>Please Select...</option>
                                 <?php 
-                                    $x=1;
-                                    $name=$_GET["name"];
-                                    $mysqli=new mysqli("localhost","root","","oneschool");
-                                    $table=mysqli_query($mysqli,"SELECT * FROM schedule WHERE teacher='$name'");
+                                    $table=mysqli_query($mysqli, "SELECT * FROM class WHERE teacher_id = '".$_SESSION['id']."' AND active = 1");
                                     while($row=mysqli_fetch_array($table)){
-                                        echo "<option>".$row[0]." - ".$row[4]." : ".$row[1]."</option>";
-                                        $x++;
+                                      $secT=mysqli_query($mysqli, "SELECT grade_level, section_name FROM subsection WHERE sec_id = ".$row[3]." AND active = 1");
+                                      if(mysqli_num_rows($secT) != 0) {
+                                        $sec=mysqli_fetch_array($secT);
+                                        $schedT=mysqli_query($mysqli, "SELECT subj_id FROM schedule WHERE sched_id = ".$row[1]." AND active = 1");
+                                        if(mysqli_num_rows($schedT) != 0) {
+                                          $sched=mysqli_fetch_array($schedT);
+                                          $subjT=mysqli_query($mysqli, "SELECT subject FROM subjects WHERE subj_id = ".$sched[0]." AND active = 1");
+                                          if(mysqli_num_rows($subjT) != 0) {
+                                            $subj=mysqli_fetch_array($subjT);
+                                            echo "<option value=".$row[0].">Grade ".$sec[0]." - ".$sec[1]." : ".$subj[0]."</option>";
+                                          }
+                                        }
+                                      }
                                     }
                                 ?>
                                 </select>
+                                </div>
                             </form>
                             </div>
                         </div>
@@ -99,8 +102,29 @@ if(!isset($_SESSION['name'])){
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tablebody">
-                                    </tbody>
+                                    <?php
+                                      $classT=mysqli_query($mysqli, "SELECT class_id FROM class WHERE teacher_id = '".$_SESSION['id']."' AND active = 1");
+                                      if(mysqli_num_rows($classT) != 0) {
+                                        while($class=mysqli_fetch_array($classT)) {
+                                          $sectionT=mysqli_query($mysqli, "SELECT student_id FROM section WHERE class_id = ".$class[0]." AND active = 1");
+                                          if(mysqli_num_rows($sectionT) != 0) {
+                                            echo "<tbody class='hidden tablebody".$class[0]."'";
+                                              while($section=mysqli_fetch_array($sectionT)) {
+                                                 $studentT=mysqli_query($mysqli, "SELECT s_fName, s_mName, s_lName FROM student WHERE student_id = '".$section[0]."' AND active = 1");
+                                                 $student=mysqli_fetch_array($studentT);
+                                                 $name=$student[2].", ".$student[0];
+                                                 if($student[1]) { $name.= " ".$student[1][0]."."; }
+                                                 echo "<tr>
+                                                      <td>".$section[0]."</td>
+                                                      <td>".$name."</td>
+                                                      <td>VIEW</td>
+                                                 </tr>";      
+                                            }
+                                            echo "</tbody>";
+                                          }
+                                        }
+                                      }
+                                    ?>
                                 </table>
                             </div>
                         </div>
@@ -119,30 +143,31 @@ if(!isset($_SESSION['name'])){
     <!-- Bootstrap and necessary plugins -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/tether/dist/js/tether.min.js"></script>
-     
     <script src="bower_components/pace/pace.min.js"></script>
-
-
     <!-- Plugins and scripts required by all views -->
     <script src="bower_components/chart.js/dist/Chart.min.js"></script>
-
-
-     <!-- jQuery -->
     <script src="js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-
-    <!-- GenesisUI main scripts -->
-
     <script src="js/app.js"></script>
-
-
-    <!-- Plugins and scripts required by this views -->
-
-    <!-- Custom scripts required by this view -->
     <script src="js/views/main.js"></script>
-
 </body>
-
 </html>
+<script>
+$(document).ready(function () {
+  var stat;
+  var id;
+  var prev;
+
+  stat = false;
+  $("#drop").change(function() {
+    if(stat) {
+      $(prev).addClass("hidden");
+    }
+    id = $("#drop").find(":selected").val();
+    table= ".tablebody"+id;
+    $(id).removeClass("hidden");
+    prev = id;
+  });
+
+});
+</script>
