@@ -31,7 +31,7 @@ USE `oneschool`;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `oneschooldb`
+-- Database: `oneschool`
 --
 
 -- --------------------------------------------------------
