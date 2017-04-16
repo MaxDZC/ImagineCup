@@ -65,21 +65,22 @@ $select=mysqli_fetch_array($selectT);
         cursor: inherit;
     }
 
-    table { table-layout: fixed; }
-    td { width: 33%; }
+    td:nth-child(1) {
+      width: 40%;
+    }
+    td:nth-child(2) {
+      width: 60%;
+    }
     </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <header class="app-header navbar">
         <?php include("header.php"); ?>
     </header>
-
     <div class="app-body">
         <?php include("sidebar.php") ?>
         
         <main class="main">
-
-            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Profile</li>
 
@@ -89,8 +90,7 @@ $select=mysqli_fetch_array($selectT);
 
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-3"></div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                     <div class="card card-default">
                                 <div class="card-header">
                                     Student Details
@@ -104,7 +104,7 @@ $select=mysqli_fetch_array($selectT);
                                       echo "img/student.png";
                                     }
                                   ?>" 
-                                  class="img-avatar" width="40%" style="padding: 2%">
+                                  class="img-avatar" width="20%" style="padding: 2%">
                                 </center>
                                 <div class="card-block">
                                 <table class="table table-striped table-bordered">
@@ -123,6 +123,14 @@ $select=mysqli_fetch_array($selectT);
                                       echo $select[0];
                                     ?>
                                 </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding-right:50px;padding-left:50px;">Address: </td>
+                                  <td><?php echo $select[7]; ?></td>
+                                </tr>
+                                <tr>
+                                  <td style="padding-right:50px;padding-left:50px;">Gender: </td>
+                                  <td><?php echo $select[8]; ?></td>
                                 </tr>
                                 <tr>
                                 <td style="padding-right:50px;padding-left:50px;">

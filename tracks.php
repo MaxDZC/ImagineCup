@@ -120,37 +120,13 @@ $cnt=$stud[6];
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>STEM</td>
-                                                <td>
-                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
-                                                </td>
-                                                <td>91.423</td>
+                                            <tr id="rank1">
                                             </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>ABM</td>
-                                                <td>
-                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
-                                                </td>
-                                                <td>91.364</td>
+                                            <tr id="rank2">
                                             </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>GAS</td>
-                                                <td>
-                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
-                                                </td>
-                                                <td>90.625</td>
+                                            <tr id="rank3">
                                             </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>HUMSS</td>
-                                                <td>
-                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
-                                                </td>
-                                                <td>90.195</td>
+                                            <tr id="rank4">
                                             </tr>
                                         </tbody>
                                     </table>   
@@ -374,7 +350,7 @@ $(document).ready(function() {
                           if($m == 2) {
                             $rankArray['HUMSS'] = $gpa;
                           } else if($m == 3) {
-                            $rankArry['STEM'] = $gpa;
+                            $rankArray['STEM'] = $gpa;
                           } else if($m == 4) {
                             $rankArray['ABM'] = $gpa;
                           } else {
@@ -387,7 +363,6 @@ $(document).ready(function() {
                         echo ", ";
                       }
                     }
-
                   ?>
                 ],
             }]
@@ -430,5 +405,26 @@ $(document).ready(function() {
 
         return colors;
     }
+
+    <?php
+      arsort($rankArray, -1);
+      $p=1;
+      foreach ($rankArray as $key => $value) {
+        if($key == "HUMSS") {
+          if($value < 75) {
+            $btn = 'danger">FAILED';
+          } else {
+            $btn = 'primary">PASSED';
+          }
+        } else if($value < 80) {
+          $btn = 'danger">FAILED';
+        } else {
+          $btn = 'primary">PASSED';
+        }
+        echo "$('#rank".$p."').html('<td>".$p."</td><td>".$key."</td><td><span style=\"padding: 5px\" class=\"btn-".$btn."</span></td><td>".$value."</td>');";
+        $p++;
+      }
+
+    ?>
 });
 </script>
