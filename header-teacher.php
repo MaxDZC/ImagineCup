@@ -1,5 +1,5 @@
         <button class="navbar-toggler mobile-sidebar-toggler hidden-lg-up" type="button">☰</button>
-        <img src="img/Logo.png" width="200px" height="50px" style="padding-top: 10px;">
+        <img src="img/Logo.png" width="200px" height="30px" style="width: 8%; margin-left: 1%; margin-top: 1%">
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item hidden-md-down">
                 <a class="nav-link" href="#"><i class="icon-bell"></i></a>
