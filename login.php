@@ -26,7 +26,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
-              <center><img src="img/logoT.png" style="width: 75%; background-color: transparent;"></center><br><br>
+              <center><img src="img/logoT.png" style="height: 50px; background-color: transparent;"></center><br><br>
       <div class="card-group mb-0">
         <div class="card p-2">
           <div class="card-block">
