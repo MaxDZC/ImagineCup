@@ -30,7 +30,7 @@ if(!isset($_SESSION['name'])){
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-      .hidden {
+      .hide {
         display: none;
       }
     </style>
@@ -108,7 +108,7 @@ if(!isset($_SESSION['name'])){
                                         while($class=mysqli_fetch_array($classT)) {
                                           $sectionT=mysqli_query($mysqli, "SELECT student_id FROM section WHERE class_id = ".$class[0]." AND active = 1");
                                           if(mysqli_num_rows($sectionT) != 0) {
-                                            echo "<tbody class='hidden tablebody".$class[0]."'";
+                                            echo "<tbody id='tablebody".$class[0]."' class='hide'>";
                                               while($section=mysqli_fetch_array($sectionT)) {
                                                  $studentT=mysqli_query($mysqli, "SELECT s_fName, s_mName, s_lName FROM student WHERE student_id = '".$section[0]."' AND active = 1");
                                                  $student=mysqli_fetch_array($studentT);
@@ -153,21 +153,19 @@ if(!isset($_SESSION['name'])){
 </body>
 </html>
 <script>
-$(document).ready(function () {
-  var stat;
-  var id;
-  var prev;
+var stat;
+var id;
+var prev;
 
-  stat = false;
-  $("#drop").change(function() {
-    if(stat) {
-      $(prev).addClass("hidden");
-    }
-    id = $("#drop").find(":selected").val();
-    table= ".tablebody"+id;
-    $(id).removeClass("hidden");
-    prev = id;
-  });
-
+stat = false;
+$("#drop").change(function() {
+  if(stat) {
+    $(prev).attr("class", "hide");
+  }
+  id = $("#drop").find(":selected").val();
+  table= "#tablebody"+id;
+  $(table).attr("class", "");
+  prev = table;
+  stat = true;
 });
 </script>
