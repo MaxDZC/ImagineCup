@@ -90,30 +90,73 @@ $cnt=$stud[6];
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">                         
-                    <div class="card"><div class="card-block">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><i class="icon-graph"></i> Subjects  </h4>
-                            </div>
-                            <div class="panel-body">
-                                <canvas id="pie" class="pie" height="200%"></canvas>
-                            </div>
-                        </div>                        
-                    </div>
-                    </div>
-                    </div>
-                    <div class="col-lg-6">                         
                     <div class="card">
                         <div class="card-block">
                         <div class="panel panel-green">
                             <div class="panel-heading"><h4 class="panel-title"><i class="icon-chart"></i> Tracks</h4></div> 
                             <div class="panel-body">
-                                <canvas id="bar" class="bar" height="200%"></canvas>
+                                <canvas id="bar" class="bar" height="128%"></canvas>
                             </div>
                         </div>
                         </div>
                     </div>
                     </div>
+
+                   <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title"><i class="fa fa-trophy"></i> RANK OF TRACKS</h4>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>Track</th>
+                                                <th>Status</th>
+                                                <th>GPA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>STEM</td>
+                                                <td>
+                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
+                                                </td>
+                                                <td>91.423</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>ABM</td>
+                                                <td>
+                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
+                                                </td>
+                                                <td>91.364</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>GAS</td>
+                                                <td>
+                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
+                                                </td>
+                                                <td>90.625</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>HUMSS</td>
+                                                <td>
+                                                    <span style="padding: 5px" class="btn-primary">PASSED</span>
+                                                </td>
+                                                <td>90.195</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>   
+                                </div>
+                            </div>
+                        </div>
                 </div>
                 
                 <div class="row">
@@ -314,7 +357,7 @@ $(document).ready(function() {
                 borderWidth: 1,
                 data: [
                   <?php
-
+                    $rankArray= array();
                     for($m=2; $m<6; $m++) {
                       $gpa = 0;
                       for($k=0; $k<$lim; $k++) {
@@ -327,10 +370,19 @@ $(document).ready(function() {
                           }
                         }
                         if($stat) {
-                          $gpa += $gradeArray[$k]*($gradeA[$m]/100);
+                          $gpa += round($gradeArray[$k]*($gradeA[$m]/100), 2);
+                          if($m == 2) {
+                            $rankArray['HUMSS'] = $gpa;
+                          } else if($m == 3) {
+                            $rankArry['STEM'] = $gpa;
+                          } else if($m == 4) {
+                            $rankArray['ABM'] = $gpa;
+                          } else {
+                            $rankArray['GAS'] = $gpa;
+                          }
                         }
                       }
-                      echo round($gpa, 2);
+                      echo $gpa;
                       if($m != 5) {
                         echo ", ";
                       }

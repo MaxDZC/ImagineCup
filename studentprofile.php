@@ -64,6 +64,9 @@ $select=mysqli_fetch_array($selectT);
         outline: none;
         cursor: inherit;
     }
+
+    table { table-layout: fixed; }
+    td { width: 33%; }
     </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -92,18 +95,6 @@ $select=mysqli_fetch_array($selectT);
                                 <div class="card-header">
                                     Student Details
                                 </div>
-                                <form id="form" method="POST" action="updateProfPic.php" enctype="multipart/form-data">
-                                <div class="fileinputs" style="margin: 2%">
-                                  <input type="file" name="photo" id="file" class="file" accept="image/*">
-                                  <div class="fakefile">
-
-                                    <label class="btn-bs-file btn btn-sm btn-primary" style="width:110%; height:120%;">
-                                      <i class="icon-camera"> Change Profile</i>
-                                    <input type="file"/>
-                                    </label>
-                                  </div>
-                                </div>
-                                </form>
                                 <center>
                                 <img src="
                                   <?php
@@ -113,36 +104,48 @@ $select=mysqli_fetch_array($selectT);
                                       echo "img/student.png";
                                     }
                                   ?>" 
-                                  class="img-avatar" width="40%">
+                                  class="img-avatar" width="40%" style="padding: 2%">
                                 </center>
                                 <div class="card-block">
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Name: <?php echo $select[2]." ";
+                                <table class="table table-striped table-bordered">
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">
+                                    Name:
+                                </td>
+                                <td> <?php echo $select[2]." ";
                                                 if($select[3]) { echo $select[3][0].". "; } echo $select[4]; ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    ID Number: 
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">
+                                    ID Number: </td><td>
                                     <?php 
                                       echo $select[0];
                                     ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Current Grade: 
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">
+                                    Current Grade: </td><td>
                                     <?php 
                                         echo $select[6];
                                     ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Section: 
+                                </td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">
+                                    Section: </td><td>
                                     <?php
-                                      if($select[1]){
+                                      if($select[10]){
                                         echo $select[5];
                                       } else {
                                         echo "Unassigned";
-                                      }
+                                     }
                                     ?>
-                                </p>
+                                </td>
+                                </tr>
                                 </div>
+                                </table>
                             </div>   
                     </div>
                     </div>
@@ -151,9 +154,7 @@ $select=mysqli_fetch_array($selectT);
             <!-- /.conainer-fluid -->
         </main>
     </div>
-
     <footer class="app-footer">
-
     </footer>
     <!-- Bootstrap and necessary plugins -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
