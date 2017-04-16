@@ -26,6 +26,7 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8">
+              <center><img src="img/logoT.png" style="width: 75%; background-color: transparent;"></center><br><br>
       <div class="card-group mb-0">
         <div class="card p-2">
           <div class="card-block">
@@ -52,9 +53,9 @@
         </div>
         <div class="card card-inverse card-primary py-3 hidden-md-down" style="width:44%">
           <div class="card-block text-center">
-            <div>
-              <h2>One School</h2>
-              <p>For a better future</p>
+            <div><br><br>
+              <p><h3>Re-imagine Education</h3></p>
+              <p><h3><i class="icon-note"></i> <i class="icon-wallet"></i>  <i class="icon-chart"></i> <i class="icon-book-open"></i></h3><i class=""></i></p>
             </div>
           </div>
         </div>

@@ -32,7 +32,7 @@ $select=mysqli_fetch_array($selectT);
     <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
     <style>
-    div.fileinputs {
+        div.fileinputs {
       position: relative;
     }
 
@@ -50,6 +50,19 @@ $select=mysqli_fetch_array($selectT);
       filter:alpha(opacity: 0);
       opacity: 0;
       z-index: 2;
+    }
+        .btn-bs-file{
+       position:relative;
+        }
+    .btn-bs-file input[type="file"]{
+        position: absolute;
+        top: -9999999;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        width:0;
+        height:0;
+        outline: none;
+        cursor: inherit;
     }
     </style>
 </head>
@@ -83,7 +96,11 @@ $select=mysqli_fetch_array($selectT);
                                 <div class="fileinputs" style="margin: 2%">
                                   <input type="file" name="photo" id="file" class="file" accept="image/*">
                                   <div class="fakefile">
-                                    <input style="background-color: lightblue; text-align: center; font-size: 1.2em" value="Change Profile Picture!">
+
+                                    <label class="btn-bs-file btn btn-sm btn-primary" style="width:110%; height:120%;">
+                                      <i class="icon-camera"> Change Profile</i>
+                                    <input type="file"/>
+                                    </label>
                                   </div>
                                 </div>
                                 </form>
