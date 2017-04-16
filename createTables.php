@@ -12,13 +12,7 @@
 SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
 SET time_zone = '+00:00';
 
-USE `oneschool`;"
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admin`
---
+USE `oneschool`;
 
 CREATE TABLE `admin` (
   `admin_id` varchar(32) NOT NULL,
@@ -29,10 +23,7 @@ CREATE TABLE `admin` (
   `idpic` varchar(64) DEFAULT NULL,
   `active` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `admin`
---
+";/*
 
 INSERT INTO `admin` (`admin_id`, `password`, `admin_fName`, `admin_mName`, `admin_lName`, `idpic`, `active`) VALUES
 ('A14103150', 'helloworld', 'Arnold', '', 'Roso', 'img/profile/17948663_1677979765550556_821516894_o.jpg', 1);
@@ -30873,7 +30864,7 @@ ALTER TABLE `student`
 
 ALTER TABLE `subsection`
   ADD CONSTRAINT `subsection_ibfk_1` FOREIGN KEY (`section_adviser`) REFERENCES `teacher` (`teacher_id`);";
-
+*/
     $result = $conn->query($sql);
     echo $sql;
     if($result) {
