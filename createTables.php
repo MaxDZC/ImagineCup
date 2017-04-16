@@ -30908,9 +30908,14 @@ ALTER TABLE `subsection`
 ";
     $result = $conn->query($sql);
 
+    if($result) {
+       echo "<h3>Table created.</h3>";
+    } else {
+      echo "WHY?";
+    }
+
  }
  catch(Exception $e){
      die(print_r($e));
  }
- echo "<h3>Table created.</h3>";
  ?>
