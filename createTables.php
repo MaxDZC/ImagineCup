@@ -12,7 +12,7 @@
 SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
 SET time_zone = '+00:00';
 
-USE `oneschool`;";/*
+USE `oneschool`;"
 
 -- --------------------------------------------------------
 
@@ -30863,28 +30863,19 @@ ALTER TABLE `seatwork`
   ADD CONSTRAINT `seatwork_ibfk_1` FOREIGN KEY (`stud_id`) REFERENCES `student` (`student_id`),
   ADD CONSTRAINT `seatwork_ibfk_2` FOREIGN KEY (`subj_id`) REFERENCES `subjects` (`subj_id`);
 
---
--- Constraints for table `section`
---
+
 ALTER TABLE `section`
   ADD CONSTRAINT `section_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`),
   ADD CONSTRAINT `section_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`);
 
---
--- Constraints for table `student`
---
 ALTER TABLE `student`
   ADD CONSTRAINT `student_ibfk_1` FOREIGN KEY (`sec_id`) REFERENCES `subsection` (`sec_id`);
 
---
--- Constraints for table `subsection`
---
 ALTER TABLE `subsection`
-  ADD CONSTRAINT `subsection_ibfk_1` FOREIGN KEY (`section_adviser`) REFERENCES `teacher` (`teacher_id`);
-*/
+  ADD CONSTRAINT `subsection_ibfk_1` FOREIGN KEY (`section_adviser`) REFERENCES `teacher` (`teacher_id`);";
 
     $result = $conn->query($sql);
-
+    echo $sql;
     if($result) {
        echo "<h3>Table created.</h3>";
     } else {
