@@ -103,21 +103,21 @@ if(!isset($_SESSION['name'])){
                                         </tr>
                                     </thead>
                                     <?php
-                                      $classT=mysqli_query($mysqli, "SELECT class_id FROM class WHERE teacher_id = '".$_SESSION['id']."' AND active = 1");
+                                      $classT=mysqli_query($mysqli, "SELECT class_id, sched_id FROM class WHERE teacher_id = '".$_SESSION['id']."' AND active = 1");
                                       if(mysqli_num_rows($classT) != 0) {
                                         while($class=mysqli_fetch_array($classT)) {
                                           $sectionT=mysqli_query($mysqli, "SELECT student_id FROM section WHERE class_id = ".$class[0]." AND active = 1");
                                           if(mysqli_num_rows($sectionT) != 0) {
                                             echo "<tbody id='tablebody".$class[0]."' class='hide'>";
                                               while($section=mysqli_fetch_array($sectionT)) {
-                                                 $studentT=mysqli_query($mysqli, "SELECT s_fName, s_mName, s_lName FROM student WHERE student_id = '".$section[0]."' AND active = 1");
+                                                 $studentT=mysqli_query($mysqli, "SELECT s_fName, s_mName, s_lName, student_id FROM student WHERE student_id = '".$section[0]."' AND active = 1");
                                                  $student=mysqli_fetch_array($studentT);
                                                  $name=$student[2].", ".$student[0];
                                                  if($student[1]) { $name.= " ".$student[1][0]."."; }
                                                  echo "<tr>
                                                       <td>".$section[0]."</td>
                                                       <td>".$name."</td>
-                                                      <td>VIEW</td>
+                                                      <td><a href='viewprogress.php?id=".$student[3]."&subj_id=".$class[1]."'><button class='btn btn-md btn-success'><i class='fa fa-circle-o'></i> View</button></a></td>
                                                  </tr>";      
                                             }
                                             echo "</tbody>";
