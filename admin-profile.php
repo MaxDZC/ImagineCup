@@ -22,7 +22,7 @@ $select=mysqli_fetch_array($selectT);
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,jQuery,CSS,HTML,RWD,Dashboard">
     <link rel="shortcut icon" href="img/favicon.png">
-    <title>One School - Welcome Page</title>
+    <title>One School - Profile Page</title>
 
     <!-- Icons -->
     <link href="css/font-awesome.min.css" rel="stylesheet">
@@ -63,6 +63,12 @@ $select=mysqli_fetch_array($selectT);
         outline: none;
         cursor: inherit;
     }
+        td:nth-child(1) {
+      width: 40%;
+    }
+    td:nth-child(2) {
+      width: 60%;
+    }
     </style>
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -73,9 +79,7 @@ $select=mysqli_fetch_array($selectT);
     <div class="app-body">
         <?php include("sidebar-admin.php") ?>
         
-        <main class="main">
-
-            
+        <main class="main">            
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Profile</li>
                 <li class="breadcrumb-item active">View</li>
@@ -89,7 +93,7 @@ $select=mysqli_fetch_array($selectT);
                         <div class="card-header">
                             Administrator Details
                         </div>
-                        <form id="form" method="POST" action="updateProfPic-admin.php" enctype="multipart/form-data">
+                       <!-- <form id="form" method="POST" action="updateProfPic-admin.php" enctype="multipart/form-data">
                                 <div class="fileinputs" style="margin: 2%">
                                   <input type="file" name="photo" id="file" class="file" accept="image/*">
                                   <div class="fakefile">
@@ -100,7 +104,7 @@ $select=mysqli_fetch_array($selectT);
                                     </label>
                                   </div>
                                 </div>
-                        </form>
+                        </form>/-->
                         <center>
                         <img src="
                           <?php
@@ -110,19 +114,19 @@ $select=mysqli_fetch_array($selectT);
                               echo "img/lecture-1.png";
                             }
                           ?>" 
-                          class="img-avatar" width="40%">
+                          class="img-avatar" width="20%" style="padding: 2%">
                         </center>
                         <div class="card-block">
-                        <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                            Name: <?php echo $select[2]." ";
-                                        if($select[3]) { echo $select[3][0].". "; } echo $select[4]; ?>
-                        </p>
-                        <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                            ID Number: 
-                            <?php 
-                              echo $select[0];
-                            ?>
-                        </p>
+                        <table class="table table-striped table-bordered">
+                        <tr>
+                        <td style="padding-right:50px;padding-left:50px;">Name: </td>
+                        <td><?php echo $select[2]." "; if($select[3]) { echo $select[3][0].". "; } echo $select[4]; ?></td>
+                        </tr>
+                        <tr>
+                        <td style="padding-right:50px;padding-left:50px;">ID Number:</td>
+                        <td>  <?php echo $select[0]; ?></td>
+                        </tr>
+                        </table>
                         </div>
                     </div>   
                     </div>

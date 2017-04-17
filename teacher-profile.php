@@ -64,6 +64,14 @@ $select=mysqli_fetch_array($selectT);
         outline: none;
         cursor: inherit;
     }
+
+    td:nth-child(1) {
+      width: 40%;
+    }
+    td:nth-child(2) {
+      width: 60%;
+    }
+
     </style>
 
 </head>
@@ -91,7 +99,7 @@ $select=mysqli_fetch_array($selectT);
                                 <div class="card-header">
                                     Teacher Details
                                 </div>
-                                <form id="form" method="POST" action="updateProfPic-teacher.php" enctype="multipart/form-data">
+                               <!-- <form id="form" method="POST" action="updateProfPic-teacher.php" enctype="multipart/form-data">
                                 <div class="fileinputs" style="margin: 2%">
                                   <input type="file" name="photo" id="file" class="file" accept="image/*">
                                   <div class="fakefile">
@@ -102,7 +110,7 @@ $select=mysqli_fetch_array($selectT);
                                     </label>
                                   </div>
                                 </div>
-                        </form>
+                        </form> /-->
                         <center>
                         <img src="
                           <?php
@@ -112,24 +120,27 @@ $select=mysqli_fetch_array($selectT);
                               echo "img/lecture-1.png";
                             }
                           ?>" 
-                          class="img-avatar" width="40%">
+                          class="img-avatar" width="20%" style="padding: 2%">
                         </center>
                                 <div class="card-block">
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Name: <?php echo $select[2]." ";
-                                        if($select[3]) { echo $select[3][0].". "; } echo $select[4]; ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    ID: <?php 
-                                        echo $select[0];
-                                    ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Email: <?php echo $select[6]; ?>
-                                </p>
-                                <p style="padding-right:50px;padding-left:50px;" class=form-control>
-                                    Educational Attainment: <?php echo $select[9]; ?>
-                                </p>
+                                <table class="table table-striped table-bordered">
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">Name: </td> 
+                                <td><?php echo $select[2]." "; if($select[3]) { echo $select[3][0].". "; } echo $select[4]; ?></td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;">ID: </td> 
+                                <td><?php echo $select[0]; ?></td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;"> Email: </td>
+                                <td><?php echo $select[6]; ?></td>
+                                </tr>
+                                <tr>
+                                <td style="padding-right:50px;padding-left:50px;"> Educational Attainment: </td> 
+                                <td><?php echo $select[9]; ?></td>
+                                </tr>
+                                </table>
                                 </div>
                             </div>   
                     </div>

@@ -1,6 +1,6 @@
  <?php
  // DB connection info
- $host = "ap-cdbr-azure-southeast-b.cloudapp.net";
+/* $host = "ap-cdbr-azure-southeast-b.cloudapp.net";
  $user = "ba6c086e8940fd";
  $pwd = "a5c3978a";
  $db = "oneschool";
@@ -25,10 +25,6 @@ CREATE DATABASE `oneschool`;
 
 USE `oneschool`;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `oneschool`
@@ -237,9 +233,6 @@ ALTER TABLE `dhx_user`
 --
 ALTER TABLE `studentgrades`
   MODIFY `GRADE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 ";
     $result = $conn->query($sql);
 

@@ -95,7 +95,7 @@ $cnt=$stud[6];
                         <div class="panel panel-green">
                             <div class="panel-heading"><h4 class="panel-title"><i class="icon-chart"></i> Tracks</h4></div> 
                             <div class="panel-body">
-                                <canvas id="bar" class="bar" height="128%"></canvas>
+                                <canvas id="bar" class="bar" height="150%"></canvas>
                             </div>
                         </div>
                         </div>

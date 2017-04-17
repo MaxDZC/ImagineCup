@@ -1,6 +1,6 @@
  <?php
  // DB connection info
- $host = "ap-cdbr-azure-southeast-b.cloudapp.net";
+/* $host = "ap-cdbr-azure-southeast-b.cloudapp.net";
  $user = "ba6c086e8940fd";
  $pwd = "a5c3978a";
  $db = "oneschool";
